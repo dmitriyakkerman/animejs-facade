@@ -8,6 +8,10 @@
   }
 }(typeof self !== 'undefined' ? self : this, function () {
 
+  let presets = {
+    translateX: '100%'
+  }
+
   class AnimeFacade {
     constructor(targets, options) {
 
@@ -17,9 +21,8 @@
 
       this.targets = targets;
       this.options = options || {};
+      this.getChosenPreset(presets);
       this.initOnScroll();
-      this.getPresets();
-      this.getPresetValue();
     }
 
     initOnScroll() {
@@ -31,33 +34,25 @@
           let windowHeight = window.innerHeight;
           let targetPosition = targetElement.getBoundingClientRect().top;
           if (targetPosition - windowHeight <= 0) {
-            that.initAnime(targetElement, that.getPresetValue());
+            that.initAnime(targetElement, that.getChosenPreset(presets));
           }
         })
       })
     }
 
-    getPresets() {
-
-      let presets = {
-        translateX: '100%'
-      }
-
-      return presets;
-    }
-
-    getPresetValue() {
+    getChosenPreset(presets) {
 
       let that = this;
 
       let matchedObject;
 
-        for(let preset in that.getPresets()) {
-          if(that.getPresets().hasOwnProperty(preset)) {
-           matchedObject = JSON.stringify({ [preset]: that.getPresets()[preset] });
+      for(let preset in presets) {
+        if(presets.hasOwnProperty(preset)) {
+          if(that.options.preset === preset) {
+            matchedObject = JSON.stringify({ [preset]: presets[preset] });
           }
+        }
       }
-
       return matchedObject;
     }
 

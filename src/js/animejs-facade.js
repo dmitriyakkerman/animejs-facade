@@ -13,10 +13,14 @@
   }
 
   class AnimeFacade {
-    constructor(targets, options) {
+    constructor(targets, options = {}) {
 
       if(!targets) {
-        throw new Error('No target selector')
+        throw new Error('No target selector');
+      }
+
+      if(!options.preset) {
+        throw new Error('Choose preset for animation');
       }
 
       this.targets = targets;

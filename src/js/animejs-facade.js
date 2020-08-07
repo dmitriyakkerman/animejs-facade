@@ -17,12 +17,12 @@
 
       this.targets = targets;
       this.options = options || {};
-      this.getTargetOnScroll();
+      this.initOnScroll();
       this.getPresets();
       this.getPresetValue();
     }
 
-    getTargetOnScroll() {
+    initOnScroll() {
 
       let that = this;
 
@@ -57,18 +57,17 @@
            matchedObject = JSON.stringify({ [preset]: that.getPresets()[preset] });
           }
       }
+
       return matchedObject;
     }
 
     initAnime(targetElement, preset) {
 
-      let that = this;
-
-      let a = Object.assign({
+      let data = Object.assign({
         targets: targetElement
       }, JSON.parse(preset));
 
-      anime(a);
+      anime(data);
     }
   }
 

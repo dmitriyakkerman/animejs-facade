@@ -9,7 +9,22 @@
 }(typeof self !== 'undefined' ? self : this, function () {
 
   let presets = {
-    translateX: '100%'
+    translateX: '100%',
+    translateY: '100%',
+    width: '100%',
+    height: '100%',
+    opacity: 1,
+    backgroundColor: '#FFF',
+    borderRadius: ['0%', '50%'],
+  }
+
+  let defaults = {
+    preset: {
+      name: 'translateX',
+    },
+    duration: 1000,
+    delay: 0,
+    easing: 'easeInOutExpo'
   }
 
   class AnimeFacade {
@@ -19,12 +34,19 @@
         throw new Error('No target selector');
       }
 
-      if(!options.preset) {
-        throw new Error('Choose preset for animation');
-      }
-
       this.targets = targets;
       this.options = options || {};
+
+      if(!Object.keys(this.options).length) {
+        return
+      }
+      else {
+        this.options.preset.name = options.preset.name || defaults.preset.name,
+        this.options.duration = options.duration || defaults.duration,
+        this.options.delay = options.delay || defaults.delay,
+        this.options.easing = options.easing || defaults.easing
+      }
+
       this.getChosenPreset(presets);
       this.initOnScroll();
     }
@@ -33,12 +55,18 @@
 
       let that = this;
 
+      let isBlocked = true;
+
       window.addEventListener('scroll', function() {
-        that.targets.forEach(function(targetElement) {
+        that.targets.forEach(function(targetElement, index) {
           let windowHeight = window.innerHeight;
           let targetPosition = targetElement.getBoundingClientRect().top;
           if (targetPosition - windowHeight <= 0) {
-            that.initAnime(targetElement, that.getChosenPreset(presets));
+            if(isBlocked) {
+              that.initAnime(targetElement, that.getChosenPreset(presets));
+              isBlocked = false;
+            }
+            isBlocked = false;
           }
         })
       })
@@ -52,8 +80,8 @@
 
       for(let preset in presets) {
         if(presets.hasOwnProperty(preset)) {
-          if(that.options.preset === preset) {
-            matchedObject = JSON.stringify({ [preset]: presets[preset] });
+          if(that.options.preset.name === preset) {
+            matchedObject = JSON.stringify({ [preset]: that.options.preset.params || presets[preset] });
           }
         }
       }
@@ -62,11 +90,17 @@
 
     initAnime(targetElement, preset) {
 
+      let that = this;
+
       let data = Object.assign({
-        targets: targetElement
+        targets: targetElement,
+        duration: that.options.duration,
+        delay: that.options.delay,
+        easing: that.options.easing
       }, JSON.parse(preset));
 
       anime(data);
+
     }
   }
 

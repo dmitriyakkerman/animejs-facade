@@ -50,9 +50,8 @@
       }
 
       this.getChosenPreset(presets);
-      // this.setOptions();
       this.initOnLoad();
-      this.startOnScroll();
+      this.initOnScroll();
     }
 
     setOptions() {
@@ -69,29 +68,29 @@
 
       let that = this;
 
-      that.targets.forEach(function(targetElement) {
-        let windowHeight = window.innerHeight;
-        let targetPosition = targetElement.getBoundingClientRect().top;
-        if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
-          that.initAnime(that.getOptions(targetElement, that.getChosenPreset(presets)));
-          targetElement.classList.add('animated');
-        }
-      })
+      that.initBase();
     }
 
-    startOnScroll() {
+    initOnScroll() {
 
       let that = this;
 
       window.addEventListener('scroll', function() {
-        that.targets.forEach(function(targetElement) {
-          let windowHeight = window.innerHeight;
-          let targetPosition = targetElement.getBoundingClientRect().top;
-          if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
-            that.initAnime(that.getOptions(targetElement, that.getChosenPreset(presets)));
-            targetElement.classList.add('animated');
-          }
-        })
+        that.initBase();
+      })
+    }
+
+    initBase() {
+
+      let that = this;
+
+      that.targets.forEach(function(targetElement) {
+        let windowHeight = window.innerHeight;
+        let targetPosition = targetElement.getBoundingClientRect().top;
+        if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
+          that.setOptions(that.getOptions(targetElement, that.getChosenPreset(presets)));
+          targetElement.classList.add('animated');
+        }
       })
     }
 
@@ -126,7 +125,7 @@
       return data;
     }
 
-    initAnime(data) {
+    setOptions(data) {
       anime(data);
     }
   }

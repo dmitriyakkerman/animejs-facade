@@ -26,7 +26,9 @@
     },
     duration: 1000,
     delay: 0,
-    easing: 'linear'
+    easing: 'linear',
+    direction: 'normal',
+    loop: false
   }
 
   class AnimeFacade {
@@ -47,6 +49,8 @@
         this.options.duration = options.preset.duration || defaults.duration;
         this.options.delay = options.preset.delay || defaults.delay;
         this.options.easing = options.preset.easing || defaults.easing;
+        this.options.loop = options.preset.loop || defaults.loop;
+        this.options.direction = options.preset.direction || defaults.direction;
       }
 
       this.getChosenPreset(presets);
@@ -119,7 +123,9 @@
         targets: targetElement,
         duration: that.options.duration,
         delay: that.options.delay,
-        easing: that.options.easing
+        easing: that.options.easing,
+        loop: that.options.loop,
+        direction: that.options.direction
       }, JSON.parse(preset));
 
       return data;

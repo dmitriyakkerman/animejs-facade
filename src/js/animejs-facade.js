@@ -26,8 +26,7 @@
     },
     duration: 1000,
     delay: 0,
-    easing: 'linear',
-    autoplay: false,
+    easing: 'linear'
   }
 
   class AnimeFacade {
@@ -48,21 +47,21 @@
         this.options.duration = options.preset.duration || defaults.duration;
         this.options.delay = options.preset.delay || defaults.delay;
         this.options.easing = options.preset.easing || defaults.easing;
-        this.options.autoplay = options.preset.autoplay || defaults.autoplay;
       }
 
       this.getChosenPreset(presets);
-      this.initOptions();
+      // this.setOptions();
       this.initOnLoad();
       this.startOnScroll();
     }
 
-    initOptions() {
+    setOptions() {
 
       let that = this;
 
       that.targets.forEach(function(targetElement) {
           that.getOptions(targetElement, that.getChosenPreset(presets));
+
       })
     }
 
@@ -70,9 +69,14 @@
 
       let that = this;
 
-        that.targets.forEach(function(targetElement) {
+      that.targets.forEach(function(targetElement) {
+        let windowHeight = window.innerHeight;
+        let targetPosition = targetElement.getBoundingClientRect().top;
+        if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
           that.initAnime(that.getOptions(targetElement, that.getChosenPreset(presets)));
-        })
+          targetElement.classList.add('animated');
+        }
+      })
     }
 
     startOnScroll() {
@@ -84,7 +88,7 @@
           let windowHeight = window.innerHeight;
           let targetPosition = targetElement.getBoundingClientRect().top;
           if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
-            that.initAnime(that.getOptions(targetElement, that.getChosenPreset(presets))).play();
+            that.initAnime(that.getOptions(targetElement, that.getChosenPreset(presets)));
             targetElement.classList.add('animated');
           }
         })
@@ -104,6 +108,7 @@
           }
         }
       }
+
       return matchedObject;
     }
 
@@ -115,8 +120,7 @@
         targets: targetElement,
         duration: that.options.duration,
         delay: that.options.delay,
-        easing: that.options.easing,
-        autoplay: that.options.autoplay
+        easing: that.options.easing
       }, JSON.parse(preset));
 
       return data;
@@ -124,10 +128,6 @@
 
     initAnime(data) {
       anime(data);
-
-      let animeInstance = anime(data);
-
-      return animeInstance;
     }
   }
 

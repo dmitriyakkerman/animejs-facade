@@ -27,6 +27,7 @@
     duration: 1000,
     delay: 0,
     easing: 'linear',
+    animationType: 'parallel',
     direction: 'normal',
     loop: false
   }
@@ -51,6 +52,7 @@
         this.options.easing = options.preset.easing || options.easing || defaults.easing;
         this.options.loop = options.preset.loop || options.loop || defaults.loop;
         this.options.direction = options.preset.direction || options.direction || defaults.direction;
+        this.options.animationType = options.animationType || defaults.animationType;
       }
 
       this.getChosenPreset(presets);
@@ -93,7 +95,6 @@
         let targetPosition = targetElement.getBoundingClientRect().top;
         if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
           that.setOptions(that.getOptions(targetElement, that.getChosenPreset(presets)));
-          that.setOptions(that.getOptions(targetElement, that.getChosenPreset(presets)));
           targetElement.classList.add('animated');
         }
       })
@@ -112,7 +113,7 @@
           for(let existingPresetKey in presets) {
             if(presets.hasOwnProperty(existingPresetKey)) {
               if(chosenPresetKey.name === existingPresetKey) {
-                matchedObject = matchedObject.concat([{ [existingPresetKey]: chosenPresetKey.params || presets[existingPresetKey] }]);
+                 matchedObject = matchedObject.concat([{ [existingPresetKey]: chosenPresetKey.params || presets[existingPresetKey] }]);
               }
             }
           }
@@ -143,8 +144,19 @@
         easing: that.options.easing,
         loop: that.options.loop,
         direction: that.options.direction,
-        keyframes: Array.isArray(preset) ? preset : ''
-      }, typeof(preset)  === 'string' ? JSON.parse(preset) : {});
+        animationType: that.options.animationType,
+        keyframes: that.options.animationType === 'consistent' && Array.isArray(preset) ? preset : ''
+      }, typeof(preset) === 'string' ? JSON.parse(preset) : {});
+
+      if(Array.isArray(preset) && that.options.animationType === 'parallel') {
+        preset.forEach(function(el) {
+          Object.defineProperty(data, Object.keys(el), {
+            value: Object.values(el)[0]
+          })
+        })
+      }
+
+      console.log(data)
 
       return data;
     }

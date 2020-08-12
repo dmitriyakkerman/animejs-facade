@@ -21,7 +21,7 @@
   }
 
   let defaults = {
-    preset: {
+    presets: {
       name: 'translateX',
     },
     duration: 1000,
@@ -46,12 +46,12 @@
         return
       }
       else {
-        this.options.preset.name = options.preset.name || defaults.preset.name;
-        this.options.duration = options.preset.duration || options.duration || defaults.duration;
-        this.options.delay = options.preset.delay || options.delay || defaults.delay;
-        this.options.easing = options.preset.easing || options.easing || defaults.easing;
-        this.options.loop = options.preset.loop || options.loop || defaults.loop;
-        this.options.direction = options.preset.direction || options.direction || defaults.direction;
+        this.options.presets.name = options.presets.name || defaults.presets.name;
+        this.options.duration = options.presets.duration || options.duration || defaults.duration;
+        this.options.delay = options.presets.delay || options.delay || defaults.delay;
+        this.options.easing = options.presets.easing || options.easing || defaults.easing;
+        this.options.loop = options.presets.loop || options.loop || defaults.loop;
+        this.options.direction = options.presets.direction || options.direction || defaults.direction;
         this.options.animationType = options.animationType || defaults.animationType;
       }
 
@@ -105,11 +105,11 @@
       let that = this;
       let matchedObject;
 
-      if(Array.isArray(that.options.preset)) {
+      if(Array.isArray(that.options.presets)) {
 
         matchedObject = [];
 
-        that.options.preset.forEach(function(chosenPresetKey) {
+        that.options.presets.forEach(function(chosenPresetKey) {
           for(let existingPresetKey in presets) {
             if(presets.hasOwnProperty(existingPresetKey)) {
               if(chosenPresetKey.name === existingPresetKey) {
@@ -123,8 +123,10 @@
 
         for(let existingPresetKey in presets) {
           if(presets.hasOwnProperty(existingPresetKey)) {
-            if(that.options.preset.name === existingPresetKey) {
-              matchedObject = JSON.stringify({ [existingPresetKey]: that.options.preset.params || presets[existingPresetKey] });
+            if(that.options.presets.name === existingPresetKey) {
+              matchedObject = {
+                [existingPresetKey]: that.options.presets.params || presets[existingPresetKey]
+              };
             }
           }
         }
@@ -146,20 +148,17 @@
         direction: that.options.direction,
         animationType: that.options.animationType,
         keyframes: that.options.animationType === 'consistent' && Array.isArray(preset) ? preset : ''
-      }, typeof(preset) === 'string' ? JSON.parse(preset) : {});
+      }, typeof(preset) === 'object' && !Array.isArray(preset) ? preset : {});
 
       if(Array.isArray(preset) && that.options.animationType === 'parallel') {
         preset.forEach(function(el) {
           Object.defineProperty(data, Object.keys(el), {
             value: Object.values(el)[0],
             enumerable: true,
-            writable: true,
             configurable: true,
           })
         })
       }
-
-      console.log(data)
 
       return data;
     }

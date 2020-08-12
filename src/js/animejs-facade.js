@@ -46,11 +46,11 @@
       }
       else {
         this.options.preset.name = options.preset.name || defaults.preset.name;
-        this.options.duration = options.preset.duration || defaults.duration;
-        this.options.delay = options.preset.delay || defaults.delay;
-        this.options.easing = options.preset.easing || defaults.easing;
-        this.options.loop = options.preset.loop || defaults.loop;
-        this.options.direction = options.preset.direction || defaults.direction;
+        this.options.duration = options.preset.duration || options.duration || defaults.duration;
+        this.options.delay = options.preset.delay || options.delay || defaults.delay;
+        this.options.easing = options.preset.easing || options.easing || defaults.easing;
+        this.options.loop = options.preset.loop || options.loop || defaults.loop;
+        this.options.direction = options.preset.direction || options.direction || defaults.direction;
       }
 
       this.getChosenPreset(presets);
@@ -93,6 +93,7 @@
         let targetPosition = targetElement.getBoundingClientRect().top;
         if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
           that.setOptions(that.getOptions(targetElement, that.getChosenPreset(presets)));
+          that.setOptions(that.getOptions(targetElement, that.getChosenPreset(presets)));
           targetElement.classList.add('animated');
         }
       })
@@ -101,13 +102,29 @@
     getChosenPreset(presets) {
 
       let that = this;
-
       let matchedObject;
 
-      for(let preset in presets) {
-        if(presets.hasOwnProperty(preset)) {
-          if(that.options.preset.name === preset) {
-            matchedObject = JSON.stringify({ [preset]: that.options.preset.params || presets[preset] });
+      if(Array.isArray(that.options.preset)) {
+
+        matchedObject = [];
+
+        that.options.preset.forEach(function(chosenPresetKey) {
+          for(let existingPresetKey in presets) {
+            if(presets.hasOwnProperty(existingPresetKey)) {
+              if(chosenPresetKey.name === existingPresetKey) {
+                matchedObject = matchedObject.concat([{ [existingPresetKey]: chosenPresetKey.params || presets[existingPresetKey] }]);
+              }
+            }
+          }
+        })
+      }
+      else {
+
+        for(let existingPresetKey in presets) {
+          if(presets.hasOwnProperty(existingPresetKey)) {
+            if(that.options.preset.name === existingPresetKey) {
+              matchedObject = JSON.stringify({ [existingPresetKey]: that.options.preset.params || presets[existingPresetKey] });
+            }
           }
         }
       }
@@ -125,8 +142,9 @@
         delay: that.options.delay,
         easing: that.options.easing,
         loop: that.options.loop,
-        direction: that.options.direction
-      }, JSON.parse(preset));
+        direction: that.options.direction,
+        keyframes: Array.isArray(preset) ? preset : ''
+      }, typeof(preset)  === 'string' ? JSON.parse(preset) : {});
 
       return data;
     }

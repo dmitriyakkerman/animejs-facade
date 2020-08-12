@@ -151,7 +151,10 @@
       if(Array.isArray(preset) && that.options.animationType === 'parallel') {
         preset.forEach(function(el) {
           Object.defineProperty(data, Object.keys(el), {
-            value: Object.values(el)[0]
+            value: Object.values(el)[0],
+            enumerable: true,
+            writable: true,
+            configurable: true,
           })
         })
       }

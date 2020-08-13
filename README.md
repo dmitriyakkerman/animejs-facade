@@ -80,4 +80,36 @@ Multiple consistent animations:
         delay: 1000
     });
     
+**Presets:**
+
+    translateX,
+    translateY,
+    translateZ,
+    rotate,
+    rotateX,
+    rotateY,
+    rotateZ,
+    scale,
+    scale,
+    scale,
+    scale,
+    width,
+    height,
+    opacity,
+    backgroundColor,
+    color,
+    borderRadius
+    
+**Options:**
+    
+    duration,
+    delay,
+    easing,
+    animationType,
+    direction,
+    loop
+
+    
+    
+    
     

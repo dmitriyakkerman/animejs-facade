@@ -1,3 +1,6 @@
+import defaults from './defaults'
+import presets from './presets'
+
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -7,30 +10,6 @@
     root.AnimeFacade = factory();
   }
 }(typeof self !== 'undefined' ? self : this, function () {
-
-  let presets = {
-    translateX: '100%',
-    translateY: '100%',
-    scale: 1,
-    rotate: '0',
-    width: '100%',
-    height: '100%',
-    opacity: 1,
-    backgroundColor: '#FFF',
-    borderRadius: ['0%', '50%'],
-  }
-
-  let defaults = {
-    presets: {
-      name: 'translateX',
-    },
-    duration: 1000,
-    delay: 0,
-    easing: 'linear',
-    animationType: 'parallel',
-    direction: 'normal',
-    loop: false
-  }
 
   class AnimeFacade {
     constructor(targets, options = {}) {
@@ -124,9 +103,28 @@
         for(let existingPresetKey in presets) {
           if(presets.hasOwnProperty(existingPresetKey)) {
             if(that.options.presets.name === existingPresetKey) {
-              matchedObject = {
-                [existingPresetKey]: that.options.presets.params || presets[existingPresetKey]
-              };
+              for(let p in presets[existingPresetKey]) {
+                if(typeof(presets[existingPresetKey]) === 'object') {
+
+                 let chosen;
+                 if(that.options.presets.params) {
+                   chosen = that.options.presets.params;
+
+                   for(let c in chosen) {
+                     matchedObject = chosen;
+                   }
+                 }
+                 else {
+                   matchedObject = presets[existingPresetKey]
+                 }
+
+                }
+                else {
+                  matchedObject = {
+                    [existingPresetKey]: that.options.presets.params || presets[existingPresetKey]
+                  };
+                }
+              }
             }
           }
         }
@@ -154,11 +152,11 @@
         preset.forEach(function(el) {
           Object.defineProperty(data, Object.keys(el), {
             value: Object.values(el)[0],
-            enumerable: true,
-            configurable: true,
+            enumerable: true
           })
         })
       }
+      console.log(data)
 
       return data;
     }

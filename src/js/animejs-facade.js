@@ -21,61 +21,85 @@ import {defaults} from "./defaults";
       this.targets = targets;
       this.options = options;
       this.preset = options.preset || {};
-      this.onInit();
+      this._onInit();
     }
 
-    onInit() {
-        this.initOnScroll();
-        this.initOnLoad();
+    _onInit() {
+        this._getChosenPreset();
+        this._initOnScroll();
+        this._initOnLoad();
     }
 
-    setTimelineOptions() {
+    _initBase() {
+
+        let that = this;
+
+        document.querySelectorAll(that.targets).forEach(function(targetElement) {
+            let windowHeight = window.innerHeight;
+            let targetPosition = targetElement.getBoundingClientRect().top;
+            if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
+                that._setTimelineOptions();
+                targetElement.classList.add('animated');
+            }
+        })
+    }
+
+    _initOnLoad() {
+        this._initBase();
+    }
+
+    _initOnScroll() {
+
+        let that = this;
+
+        window.addEventListener('scroll', function() {
+            that._initBase();
+        })
+    }
+
+    _getChosenPreset() {
+
+        let chosenPreset;
+
+        for (let preset in presets) {
+            if(presets.hasOwnProperty(preset)) {
+                if(this.preset.name === preset) {
+                    chosenPreset = presets[preset]
+                }
+            }
+        }
+
+        return chosenPreset;
+    }
+
+    _setTimelineOptions() {
 
         let that = this;
 
         let timeline = anime.timeline({
             easing: that.options.easing || defaults.easing,
-            duration: that.options.duration || defaults.duration
+            duration: that.options.duration || defaults.duration,
+            delay: that.options.delay || defaults.delay,
+            loop: that.options.loop || defaults.loop,
+            direction: that.options.direction || defaults.direction,
+            autoplay: that.options.autoplay || defaults.autoplay
         })
-        
-        this.targets.forEach(function (target) {
-            timeline.add({
-                targets: target,
-                translateX: 550,
+
+        this.targets.forEach(function (target, targetIndex) {
+
+            that._getChosenPreset().forEach(function(preset, presetIndex) {
+
+                if(targetIndex === presetIndex) {
+
+                    timeline.add(
+                        Object.assign({
+                            targets: target
+                        }, preset)
+                    )
+                }
+
             })
         })
-    }
-
-    initTimeline() {
-
-        let that = this;
-
-        let isBlocked = true;
-
-        document.querySelectorAll(that.targets).forEach(function(targetElement) {
-            let windowHeight = window.innerHeight;
-            let targetPosition = targetElement.getBoundingClientRect().top;
-            if (targetPosition - windowHeight <= 0) {
-                if(isBlocked) {
-                    that.setTimelineOptions();
-                    isBlocked = false;
-                }
-                isBlocked = false;
-            }
-        })
-    }
-
-    initOnLoad() {
-        this.initTimeline();
-    }
-
-    initOnScroll() {
-
-      let that = this;
-
-      window.addEventListener('scroll', function() {
-        that.initTimeline();
-      })
     }
   }
 

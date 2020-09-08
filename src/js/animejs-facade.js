@@ -26,6 +26,7 @@ import {defaults} from "./defaults";
 
     _onInit() {
         this._getChosenPreset();
+        this._getAdditionalParams();
         this._initOnScroll();
         this._initOnLoad();
     }
@@ -70,6 +71,10 @@ import {defaults} from "./defaults";
         }
 
         return chosenPreset;
+    }
+
+    _checkCustomizedParams() {
+        return this.preset.params;
     }
 
     _setTimelineOptions() {

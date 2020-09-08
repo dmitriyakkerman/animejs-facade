@@ -1,3 +1,6 @@
+import {presets} from "./presets";
+import {defaults} from "./defaults";
+
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -8,25 +11,6 @@
   }
 }(typeof self !== 'undefined' ? self : this, function () {
 
-  let presets = {
-    translateX: '100%',
-    translateY: '100%',
-    width: '100%',
-    height: '100%',
-    opacity: 1,
-    backgroundColor: '#FFF',
-    borderRadius: ['0%', '50%'],
-  }
-
-  let defaults = {
-    preset: {
-      name: 'translateX',
-    },
-    duration: 1000,
-    delay: 0,
-    easing: 'easeInOutExpo'
-  }
-
   class AnimeFacade {
     constructor(targets, options = {}) {
 
@@ -35,72 +19,63 @@
       }
 
       this.targets = targets;
-      this.options = options || {};
+      this.options = options;
+      this.preset = options.preset || {};
+      this.onInit();
+    }
 
-      if(!Object.keys(this.options).length) {
-        return
-      }
-      else {
-        this.options.preset.name = options.preset.name || defaults.preset.name,
-        this.options.duration = options.duration || defaults.duration,
-        this.options.delay = options.delay || defaults.delay,
-        this.options.easing = options.easing || defaults.easing
-      }
+    onInit() {
+        this.initOnScroll();
+        this.initOnLoad();
+    }
 
-      this.getChosenPreset(presets);
-      this.initOnScroll();
+    setTimelineOptions() {
+
+        let that = this;
+
+        let timeline = anime.timeline({
+            easing: that.options.easing || defaults.easing,
+            duration: that.options.duration || defaults.duration
+        })
+        
+        this.targets.forEach(function (target) {
+            timeline.add({
+                targets: target,
+                translateX: 550,
+            })
+        })
+    }
+
+    initTimeline() {
+
+        let that = this;
+
+        let isBlocked = true;
+
+        document.querySelectorAll(that.targets).forEach(function(targetElement) {
+            let windowHeight = window.innerHeight;
+            let targetPosition = targetElement.getBoundingClientRect().top;
+            if (targetPosition - windowHeight <= 0) {
+                if(isBlocked) {
+                    that.setTimelineOptions();
+                    isBlocked = false;
+                }
+                isBlocked = false;
+            }
+        })
+    }
+
+    initOnLoad() {
+        this.initTimeline();
     }
 
     initOnScroll() {
 
       let that = this;
 
-      let isBlocked = true;
-
       window.addEventListener('scroll', function() {
-        that.targets.forEach(function(targetElement, index) {
-          let windowHeight = window.innerHeight;
-          let targetPosition = targetElement.getBoundingClientRect().top;
-          if (targetPosition - windowHeight <= 0) {
-            if(isBlocked) {
-              that.initAnime(targetElement, that.getChosenPreset(presets));
-              isBlocked = false;
-            }
-            isBlocked = false;
-          }
-        })
+        that.initTimeline();
       })
-    }
-
-    getChosenPreset(presets) {
-
-      let that = this;
-
-      let matchedObject;
-
-      for(let preset in presets) {
-        if(presets.hasOwnProperty(preset)) {
-          if(that.options.preset.name === preset) {
-            matchedObject = JSON.stringify({ [preset]: that.options.preset.params || presets[preset] });
-          }
-        }
-      }
-      return matchedObject;
-    }
-
-    initAnime(targetElement, preset) {
-
-      let that = this;
-
-      let data = Object.assign({
-        targets: targetElement,
-        duration: that.options.duration,
-        delay: that.options.delay,
-        easing: that.options.easing
-      }, JSON.parse(preset));
-
-      anime(data);
-
     }
   }
 

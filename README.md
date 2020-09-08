@@ -29,18 +29,7 @@ Script:
 
     <script src="anime.min.js"></script>
     <script src="./dist/js/animejs-facade.min.js"></script>
-    
-**Examples:**
 
-    
-**Options:**
-    
-    duration,
-    delay,
-    easing,
-    animationType,
-    direction,
-    loop
 
     
     

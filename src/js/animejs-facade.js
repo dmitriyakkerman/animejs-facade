@@ -1,5 +1,6 @@
-import {presets} from "./presets";
 import {defaults} from "./defaults";
+import {presets} from "./presets";
+import {easings} from "./easings";
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -21,12 +22,13 @@ import {defaults} from "./defaults";
       this.targets = targets;
       this.options = options;
       this.preset = options.preset || {};
+      this._timeline = null;
       this._onInit();
     }
 
     _onInit() {
         this._getChosenPreset();
-        this._getAdditionalParams();
+        this._checkCustomizedParams();
         this._initOnScroll();
         this._initOnLoad();
     }
@@ -39,7 +41,7 @@ import {defaults} from "./defaults";
             let windowHeight = window.innerHeight;
             let targetPosition = targetElement.getBoundingClientRect().top;
             if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
-                that._setTimelineOptions();
+                that._initTimeLine();
                 targetElement.classList.add('animated');
             }
         })
@@ -73,38 +75,120 @@ import {defaults} from "./defaults";
         return chosenPreset;
     }
 
+    _getChosenEasing() {
+
+        let that = this;
+
+        let chosenEasing;
+
+        easings.forEach(function (easing) {
+            for(let e in easing) {
+                if(easing.hasOwnProperty(e)) {
+                    if(that._validateChosenEasing() === e) {
+                        chosenEasing = easing[e];
+                    }
+                }
+            }
+        });
+
+        return chosenEasing;
+    }
+
+    _validateChosenEasing() {
+
+        let that = this;
+
+        let validEasing;
+
+        if(this.options.easing) {
+
+            if(this.options.easing.indexOf("-") > -1) {
+                let splittedString = that.options.easing.split('-');
+                splittedString = splittedString.map(function (string, stringIndex) {
+                    if(stringIndex !== 0) {
+                        return string[0].toUpperCase() + string.slice(1);
+                    }
+
+                    return string;
+                });
+
+                validEasing = splittedString.join('')
+            }
+            else {
+                validEasing = this.options.easing;
+            }
+
+        }
+
+        return validEasing;
+    }
+
     _checkCustomizedParams() {
         return this.preset.params;
     }
 
-    _setTimelineOptions() {
+    _initTimeLine() {
+        this._setDefaultTimelineOptions();
+        this._setTimelineAnimations();
+    }
+
+    _setDefaultTimelineOptions() {
 
         let that = this;
 
-        let timeline = anime.timeline({
-            easing: that.options.easing || defaults.easing,
+        this._timeline = anime.timeline({
+            easing: that._getChosenEasing() || defaults.easing,
             duration: that.options.duration || defaults.duration,
             delay: that.options.delay || defaults.delay,
             loop: that.options.loop || defaults.loop,
             direction: that.options.direction || defaults.direction,
             autoplay: that.options.autoplay || defaults.autoplay
-        })
+        });
+    }
 
-        this.targets.forEach(function (target, targetIndex) {
+    _setTimelineAnimations() {
 
-            that._getChosenPreset().forEach(function(preset, presetIndex) {
+        let that = this;
 
-                if(targetIndex === presetIndex) {
-
-                    timeline.add(
-                        Object.assign({
-                            targets: target
-                        }, preset)
-                    )
-                }
-
+        if(that._checkCustomizedParams()) {
+            this.targets.forEach(function (target, targetIndex) {
+                that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
+                    that._getChosenPreset().forEach(function(chosenPreset) {
+                        for(let customizedParam in customizedParams) {
+                            if(customizedParams.hasOwnProperty(customizedParam)) {
+                                for(let preset in chosenPreset) {
+                                    if(chosenPreset.hasOwnProperty(preset)) {
+                                        if(customizedParam === preset && targetIndex === customizedParamsIndex) {
+                                            that._mergeTimelineOptions(target, customizedParams)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                })
             })
-        })
+        }
+        else {
+            this.targets.forEach(function (target, targetIndex) {
+                that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
+                    if(targetIndex === chosenPresetIndex) {
+                        that._mergeTimelineOptions(target, chosenPreset)
+                    }
+                })
+            })
+        }
+    }
+
+    _mergeTimelineOptions(target, presets) {
+
+        let that = this;
+
+        that._timeline.add(
+            Object.assign({
+                targets: target
+            }, presets)
+        )
     }
   }
 

@@ -1,6 +1,6 @@
 export const defaults = {
     duration: 1000,
-    easing: 'easeInOutExpo',
+    easing: 'linear',
     delay: 0,
     loop: false,
     direction: 'normal',

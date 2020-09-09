@@ -27,8 +27,6 @@ import {easings} from "./easings";
     }
 
     _onInit() {
-        this._getChosenPreset();
-        this._checkCustomizedParams();
         this._initOnScroll();
         this._initOnLoad();
     }

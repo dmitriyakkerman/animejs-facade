@@ -94,14 +94,11 @@ import {easings} from "./easings";
 
     _validateChosenEasing() {
 
-        let that = this;
-
         let validEasing;
-        let easing = that.options.easing;
 
-        if(easing) {
-            if(easing.indexOf("-") > -1) {
-                let splittedString = easing.split('-');
+        if(this.options.easing) {
+            if(this.options.easing.indexOf("-") > -1) {
+                let splittedString = this.options.easing.split('-');
                 splittedString = splittedString.map(function (string, stringIndex) {
                     if(stringIndex !== 0) {
                         return string[0].toUpperCase() + string.slice(1);
@@ -113,7 +110,7 @@ import {easings} from "./easings";
                 validEasing = splittedString.join('')
             }
             else {
-                validEasing = easing;
+                validEasing = this.options.easing;
             }
         }
 
@@ -148,7 +145,7 @@ import {easings} from "./easings";
         let that = this;
 
         if(that._checkCustomizedParams()) {
-            this.targets.forEach(function (target, targetIndex) {
+            that.targets.forEach(function (target, targetIndex) {
                 that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
                     that._getChosenPreset().forEach(function(chosenPreset) {
                         for(let customizedParam in customizedParams) {
@@ -167,7 +164,7 @@ import {easings} from "./easings";
             })
         }
         else {
-            this.targets.forEach(function (target, targetIndex) {
+            that.targets.forEach(function (target, targetIndex) {
                 that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
                     if(targetIndex === chosenPresetIndex) {
                         that._mergeTimelineOptions(target, chosenPreset)
@@ -179,9 +176,7 @@ import {easings} from "./easings";
 
     _mergeTimelineOptions(target, presets) {
 
-        let that = this;
-
-        that._timeline.add(
+        this._timeline.add(
             Object.assign({
                 targets: target
             }, presets)

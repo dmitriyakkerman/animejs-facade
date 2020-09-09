@@ -1,8 +1,8 @@
-export default {
-  duration: 1000,
-  delay: 0,
-  easing: 'linear',
-  animationType: 'parallel',
-  direction: 'normal',
-  loop: false
+export const defaults = {
+    duration: 1000,
+    easing: 'linear',
+    delay: 0,
+    loop: false,
+    direction: 'normal',
+    autoplay: true,
 }

@@ -9,5 +9,10 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist/js'),
     filename: '[name].min.js'
+  },
+  devServer: {
+    contentBase: path.join(__dirname + '/'),
+    compress: true,
+    port: 9000
   }
 };

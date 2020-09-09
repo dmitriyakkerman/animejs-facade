@@ -1,0 +1,97 @@
+body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.header {
+    position: fixed;
+    width: 100%;
+    background: #fff;
+    z-index: 9;
+}
+
+.header__inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 25px 0;
+    background: #fff;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+}
+
+.header ul {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+}
+
+.header ul li {
+    margin: 0 50px;
+}
+
+.screen__inner {
+    display: flex;
+    justify-content: space-between;
+}
+
+.screen__inner > div {
+    width: 50%;
+}
+
+.screen__inner > div:nth-child(2) {
+    padding-top: 200px;
+    padding-left: 50px;
+}
+
+.screen .image {
+    overflow: hidden;
+}
+
+.screen__inner img {
+    width: 100%;
+    height: auto;
+}
+
+.screen__inner h1 {
+    font-size: 120px;
+    margin-bottom: 200px;
+}
+
+.screen__inner .text {
+    margin-bottom: 50px;
+}
+
+.decor {
+    position: relative;
+    margin: 100px;
+    padding-left: 20px;
+    font-size: 50px;
+    height: 0;
+    overflow: hidden;
+}
+
+.decor:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100px;
+    background: #000;
+    content: '';
+}
+
+.box {
+    width: 30px;
+    height: 30px;
+    background: black;
+}

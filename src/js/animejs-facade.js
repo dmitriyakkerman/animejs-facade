@@ -1,5 +1,6 @@
-import defaults from './defaults'
-import presets from './presets'
+import {defaults} from "./defaults";
+import {presets} from "./presets";
+import {easings} from "./easings";
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -18,151 +19,173 @@ import presets from './presets'
         throw new Error('No target selector');
       }
 
-      this.targets = typeof(targets) === 'string' ? document.querySelectorAll(targets) : targets;
-      this.options = options || {};
-
-      if(!Object.keys(this.options).length) {
-        return
-      }
-      else {
-        this.options.presets.name = options.presets.name || defaults.presets.name;
-        this.options.duration = options.presets.duration || options.duration || defaults.duration;
-        this.options.delay = options.presets.delay || options.delay || defaults.delay;
-        this.options.easing = options.presets.easing || options.easing || defaults.easing;
-        this.options.loop = options.presets.loop || options.loop || defaults.loop;
-        this.options.direction = options.presets.direction || options.direction || defaults.direction;
-        this.options.animationType = options.animationType || defaults.animationType;
-      }
-
-      this.getChosenPreset(presets);
-      this.initOnLoad();
-      this.initOnScroll();
+      this.targets = targets;
+      this.options = options;
+      this.preset = options.preset || {};
+      this._timeline = null;
+      this._onInit();
     }
 
-    setOptions() {
-
-      let that = this;
-
-      that.targets.forEach(function(targetElement) {
-          that.getOptions(targetElement, that.getChosenPreset(presets));
-
-      })
+    _onInit() {
+        this._initOnScroll();
+        this._initOnLoad();
     }
 
-    initOnLoad() {
+    _initBase() {
 
-      let that = this;
+        let that = this;
 
-      that.initBase();
-    }
-
-    initOnScroll() {
-
-      let that = this;
-
-      window.addEventListener('scroll', function() {
-        that.initBase();
-      })
-    }
-
-    initBase() {
-
-      let that = this;
-
-      that.targets.forEach(function(targetElement) {
-        let windowHeight = window.innerHeight;
-        let targetPosition = targetElement.getBoundingClientRect().top;
-        if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
-          that.setOptions(that.getOptions(targetElement, that.getChosenPreset(presets)));
-          targetElement.classList.add('animated');
-        }
-      })
-    }
-
-    getChosenPreset(presets) {
-
-      let that = this;
-      let matchedObject;
-
-      if(Array.isArray(that.options.presets)) {
-
-        matchedObject = [];
-
-        that.options.presets.forEach(function(chosenPresetKey) {
-          for(let existingPresetKey in presets) {
-            if(presets.hasOwnProperty(existingPresetKey)) {
-              if(chosenPresetKey.name === existingPresetKey) {
-                 matchedObject = matchedObject.concat([{ [existingPresetKey]: chosenPresetKey.params || presets[existingPresetKey] }]);
-              }
+        document.querySelectorAll(that.targets).forEach(function(targetElement) {
+            let windowHeight = window.innerHeight;
+            let targetPosition = targetElement.getBoundingClientRect().top;
+            if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
+                that._initTimeLine();
+                targetElement.classList.add('animated');
             }
-          }
         })
-      }
-      else {
+    }
 
-        for(let existingPresetKey in presets) {
-          if(presets.hasOwnProperty(existingPresetKey)) {
-            if(that.options.presets.name === existingPresetKey) {
-              for(let p in presets[existingPresetKey]) {
-                if(typeof(presets[existingPresetKey]) === 'object') {
+    _initOnLoad() {
+        this._initBase();
+    }
 
-                 let chosen;
-                 if(that.options.presets.params) {
-                   chosen = that.options.presets.params;
+    _initOnScroll() {
 
-                   for(let c in chosen) {
-                     matchedObject = chosen;
-                   }
-                 }
-                 else {
-                   matchedObject = presets[existingPresetKey]
-                 }
+        let that = this;
 
+        window.addEventListener('scroll', function() {
+            that._initBase();
+        })
+    }
+
+    _getChosenPreset() {
+
+        let chosenPreset;
+
+        for (let preset in presets) {
+            if(presets.hasOwnProperty(preset)) {
+                if(this.preset.name === preset) {
+                    chosenPreset = presets[preset]
                 }
-                else {
-                  matchedObject = {
-                    [existingPresetKey]: that.options.presets.params || presets[existingPresetKey]
-                  };
-                }
-              }
             }
-          }
         }
-      }
 
-      return matchedObject;
+        return chosenPreset;
     }
 
-    getOptions(targetElement, preset) {
+    _getChosenEasing() {
 
-      let that = this;
+        let that = this;
 
-      let data = Object.assign({
-        targets: targetElement,
-        duration: that.options.duration,
-        delay: that.options.delay,
-        easing: that.options.easing,
-        loop: that.options.loop,
-        direction: that.options.direction,
-        animationType: that.options.animationType,
-        keyframes: that.options.animationType === 'consistent' && Array.isArray(preset) ? preset : ''
-      }, typeof(preset) === 'object' && !Array.isArray(preset) ? preset : {});
+        let chosenEasing;
 
-      if(Array.isArray(preset) && that.options.animationType === 'parallel') {
-        preset.forEach(function(el) {
-          Object.defineProperty(data, Object.keys(el), {
-            value: Object.values(el)[0],
-            enumerable: true
-          })
-        })
-      }
-      console.log(data)
+        easings.forEach(function (easing) {
+            for(let e in easing) {
+                if(easing.hasOwnProperty(e)) {
+                    if(that._validateChosenEasing() === e) {
+                        chosenEasing = easing[e];
+                    }
+                }
+            }
+        });
 
-      return data;
+        return chosenEasing;
     }
 
-    setOptions(data) {
-      anime(data);
+    _validateChosenEasing() {
+
+        let that = this;
+
+        let validEasing;
+        let easing = that.options.easing;
+
+        if(easing) {
+            if(easing.indexOf("-") > -1) {
+                let splittedString = easing.split('-');
+                splittedString = splittedString.map(function (string, stringIndex) {
+                    if(stringIndex !== 0) {
+                        return string[0].toUpperCase() + string.slice(1);
+                    }
+
+                    return string;
+                });
+
+                validEasing = splittedString.join('')
+            }
+            else {
+                validEasing = easing;
+            }
+        }
+
+        return validEasing;
+    }
+
+    _checkCustomizedParams() {
+        return this.preset.params;
+    }
+
+    _initTimeLine() {
+        this._setDefaultTimelineOptions();
+        this._setTimelineAnimations();
+    }
+
+    _setDefaultTimelineOptions() {
+
+        let that = this;
+
+        this._timeline = anime.timeline({
+            easing: that._getChosenEasing(),
+            duration: that.options.duration || defaults.duration,
+            delay: that.options.delay || defaults.delay,
+            loop: that.options.loop || defaults.loop,
+            direction: that.options.direction || defaults.direction,
+            autoplay: that.options.autoplay || defaults.autoplay
+        });
+    }
+
+    _setTimelineAnimations() {
+
+        let that = this;
+
+        if(that._checkCustomizedParams()) {
+            this.targets.forEach(function (target, targetIndex) {
+                that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
+                    that._getChosenPreset().forEach(function(chosenPreset) {
+                        for(let customizedParam in customizedParams) {
+                            if(customizedParams.hasOwnProperty(customizedParam)) {
+                                for(let preset in chosenPreset) {
+                                    if(chosenPreset.hasOwnProperty(preset)) {
+                                        if(customizedParam === preset && targetIndex === customizedParamsIndex) {
+                                            that._mergeTimelineOptions(target, customizedParams)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                })
+            })
+        }
+        else {
+            this.targets.forEach(function (target, targetIndex) {
+                that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
+                    if(targetIndex === chosenPresetIndex) {
+                        that._mergeTimelineOptions(target, chosenPreset)
+                    }
+                })
+            })
+        }
+    }
+
+    _mergeTimelineOptions(target, presets) {
+
+        let that = this;
+
+        that._timeline.add(
+            Object.assign({
+                targets: target
+            }, presets)
+        )
     }
   }
 

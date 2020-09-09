@@ -13,8 +13,5 @@ export let easings = [
     },
     {
         linear: 'linear'
-    },
-    {
-        cubicBezier: ''
     }
 ]

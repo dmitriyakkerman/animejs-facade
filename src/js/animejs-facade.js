@@ -97,11 +97,11 @@ import {easings} from "./easings";
         let that = this;
 
         let validEasing;
+        let easing = that.options.easing;
 
-        if(this.options.easing) {
-
-            if(this.options.easing.indexOf("-") > -1) {
-                let splittedString = that.options.easing.split('-');
+        if(easing) {
+            if(easing.indexOf("-") > -1) {
+                let splittedString = easing.split('-');
                 splittedString = splittedString.map(function (string, stringIndex) {
                     if(stringIndex !== 0) {
                         return string[0].toUpperCase() + string.slice(1);
@@ -113,9 +113,8 @@ import {easings} from "./easings";
                 validEasing = splittedString.join('')
             }
             else {
-                validEasing = this.options.easing;
+                validEasing = easing;
             }
-
         }
 
         return validEasing;
@@ -135,7 +134,7 @@ import {easings} from "./easings";
         let that = this;
 
         this._timeline = anime.timeline({
-            easing: that._getChosenEasing() || defaults.easing,
+            easing: that._getChosenEasing(),
             duration: that.options.duration || defaults.duration,
             delay: that.options.delay || defaults.delay,
             loop: that.options.loop || defaults.loop,

@@ -180,10 +180,6 @@ import {easings} from "./easings";
                 targets: target
             }, presets), offset
         )
-
-        console.log(Object.assign({
-            targets: target
-        }, presets), offset)
     }
   }
 

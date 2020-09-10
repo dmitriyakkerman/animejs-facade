@@ -140,27 +140,27 @@ import {easings} from "./easings";
         }
     }
 
-    _setTimelineFromCustomizedParams() {
-        let that = this;
+      _setTimelineFromCustomizedParams() {
+          let that = this;
 
-        this.targets.forEach(function (target, targetIndex) {
-            that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
-                that._getChosenPreset().forEach(function(chosenPreset) {
-                    for(let customizedParam in customizedParams) {
-                        if(customizedParams.hasOwnProperty(customizedParam)) {
-                            for(let preset in chosenPreset) {
-                                if(chosenPreset.hasOwnProperty(preset)) {
-                                    if(customizedParam === preset && targetIndex === customizedParamsIndex) {
-                                        that._mergeTimelineOptions(target, customizedParams)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-            })
-        })
-    }
+          this.targets.forEach(function (target, targetIndex) {
+              that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
+                  that._getChosenPreset().forEach(function(chosenPreset) {
+                      for(let customizedParam in customizedParams) {
+                          if(customizedParams.hasOwnProperty(customizedParam)) {
+                              for(let preset in chosenPreset) {
+                                  if(chosenPreset.hasOwnProperty(preset)) {
+                                      if(customizedParam === preset && targetIndex === customizedParamsIndex) {
+                                          that._mergeTimelineOptions(target, customizedParams, customizedParams['offset'])
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  })
+              })
+          })
+      }
 
     _setTimelineFromChosenPreset() {
         let that = this;
@@ -174,12 +174,16 @@ import {easings} from "./easings";
         })
     }
 
-    _mergeTimelineOptions(target, presets) {
+    _mergeTimelineOptions(target, presets, offset) {
         this._timeline.add(
             Object.assign({
                 targets: target
-            }, presets)
+            }, presets), offset
         )
+
+        console.log(Object.assign({
+            targets: target
+        }, presets), offset)
     }
   }
 

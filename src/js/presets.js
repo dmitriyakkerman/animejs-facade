@@ -1,4 +1,4 @@
-export const presets = {
+module.exports = {
     headerAnimation: [
         {
             translateX: [0, '100%']
@@ -15,4 +15,4 @@ export const presets = {
             translateX: [0, '100%']
         },
     ]
-}
+};

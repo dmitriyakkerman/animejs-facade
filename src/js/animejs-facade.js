@@ -1,6 +1,6 @@
-import {defaults} from "./defaults";
-import {presets} from "./presets";
-import {easings} from "./easings";
+const defaults = require('./defaults');
+const presets = require('./presets');
+const easings = require('./easings');
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {

@@ -1,4 +1,4 @@
-export let easings = [
+module.exports = [
     {
         ease: 'cubicBezier(0.25, 0.1, 0.25, 1)',
     },
@@ -14,4 +14,4 @@ export let easings = [
     {
         linear: 'linear'
     }
-]
+];

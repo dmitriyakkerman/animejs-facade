@@ -60,6 +60,7 @@ describe('AnimeFacade Tests', () => {
 
     test('AnimeFacade should have preset option named "someAnimation" ', () => {
         expect(animeFacadeInstance.options).toBeDefined();
+        expect(animeFacadeInstance.options.preset).toBeInstanceOf(Object);
         expect(animeFacadeInstance.options.preset.name).toBe("someAnimation");
     });
 

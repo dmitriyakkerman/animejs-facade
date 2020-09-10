@@ -70,14 +70,13 @@ const easings = require('./easings');
         return chosenPreset;
     }
 
-    _getChosenEasing() {
-        let that = this;
+    static getChosenEasing(easingToSet) {
         let chosenEasing;
 
         easings.forEach(function (easing) {
             for(let e in easing) {
                 if(easing.hasOwnProperty(e)) {
-                    if(that._validateChosenEasing() === e) {
+                    if(AnimeFacade.validateEasing(easingToSet) === e) {
                         chosenEasing = easing[e];
                     }
                 }
@@ -87,12 +86,12 @@ const easings = require('./easings');
         return chosenEasing;
     }
 
-    _validateChosenEasing() {
+    static validateEasing(easingToValidate) {
         let validEasing;
 
-        if(this.options.easing) {
-            if(this.options.easing.indexOf("-") > -1) {
-                let splittedString = this.options.easing.split('-');
+        if(easingToValidate) {
+            if(easingToValidate.indexOf("-") > -1) {
+                let splittedString = easingToValidate.split('-');
                 splittedString = splittedString.map(function (string, stringIndex) {
                     if(stringIndex !== 0) {
                         return string[0].toUpperCase() + string.slice(1);
@@ -104,14 +103,14 @@ const easings = require('./easings');
                 validEasing = splittedString.join('')
             }
             else {
-                validEasing = this.options.easing;
+                validEasing = easingToValidate;
             }
         }
 
         return validEasing;
     }
 
-    _checkCustomizedParams() {
+    _checkCustomParams() {
         return this.preset.params;
     }
 
@@ -122,7 +121,7 @@ const easings = require('./easings');
 
     _setDefaultTimelineOptions() {
         this._timeline = anime.timeline({
-            easing: this._getChosenEasing() || defaults.easing,
+            easing: AnimeFacade.getChosenEasing(this.options.easing) || defaults.easing,
             duration: this.options.duration || defaults.duration,
             delay: this.options.delay || defaults.delay,
             loop: this.options.loop || defaults.loop,
@@ -132,35 +131,53 @@ const easings = require('./easings');
     }
 
     _setTimelineAnimations() {
-        if(this._checkCustomizedParams()) {
-            this._setTimelineFromCustomizedParams();
+
+        if(this._checkCustomParams()) {
+            this._setTimelineFromCustomParams();
         }
         else {
             this._setTimelineFromChosenPreset();
         }
     }
 
-      _setTimelineFromCustomizedParams() {
-          let that = this;
+    _setTimelineFromCustomParams() {
+        let that = this;
 
-          this.targets.forEach(function (target, targetIndex) {
-              that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
-                  that._getChosenPreset().forEach(function(chosenPreset) {
-                      for(let customizedParam in customizedParams) {
-                          if(customizedParams.hasOwnProperty(customizedParam)) {
-                              for(let preset in chosenPreset) {
-                                  if(chosenPreset.hasOwnProperty(preset)) {
-                                      if(customizedParam === preset && targetIndex === customizedParamsIndex) {
-                                          that._mergeTimelineOptions(target, customizedParams, customizedParams['offset'])
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  })
-              })
-          })
-      }
+        this.targets.forEach(function (target, targetIndex) {
+            that._checkCustomParams().forEach(function(customParams, customParamsIndex) {
+                that._getChosenPreset().forEach(function(chosenPreset) {
+                    for(let customParam in customParams) {
+                        if(customParams.hasOwnProperty(customParam)) {
+                            for(let preset in chosenPreset) {
+                                if(chosenPreset.hasOwnProperty(preset)) {
+                                    that._setCustomEasing();
+
+                                    if(customParam === preset && targetIndex === customParamsIndex) {
+                                        that._mergeTimelineOptions(target, customParams, customParams['offset'])
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            })
+        })
+    }
+
+    _setCustomEasing() {
+        this._checkCustomParams().forEach(function(customParams) {
+            for(let customParam in customParams) {
+                if(customParams.hasOwnProperty(customParam)) {
+                    if(customParam === 'easing') {
+                        Object.defineProperty(customParams, 'easing', {
+                            writable: true,
+                            value: AnimeFacade.getChosenEasing(AnimeFacade.validateEasing(customParams[customParam]))
+                        })
+                    }
+                }
+            }
+        })
+    }
 
     _setTimelineFromChosenPreset() {
         let that = this;

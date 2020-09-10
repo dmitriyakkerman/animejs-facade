@@ -3,29 +3,29 @@ const defaults = require('../src/js/defaults');
 const presets = require('../src/js/presets');
 const easings = require('../src/js/easings');
 
-describe('AnimeFacade Tests', () => {
+let animeFacadeInstance;
+let params = [
+    {
+        translateX: [0, '100px'],
+        width: [0, '100px'],
+        duration: 1000,
+        delay: 500
+    },
+    {
+        translateY: [0, '100px'],
+        duration: 1000,
+        delay: 300,
+        offset: -500
+    },
+    {
+        scale: [0, 2],
+        height: [0, '10px'],
+        duration: 1000,
+        offset: 1000
+    }
+]
 
-    let animeFacadeInstance;
-    let params = [
-        {
-            translateX: [0, '100px'],
-            width: [0, '100px'],
-            duration: 1000,
-            delay: 500
-        },
-        {
-            translateY: [0, '100px'],
-            duration: 1000,
-            delay: 300,
-            offset: -500
-        },
-        {
-            scale: [0, 2],
-            height: [0, '10px'],
-            duration: 1000,
-            offset: 1000
-        }
-    ]
+describe('AnimeFacade Tests', () => {
 
     beforeEach(() => {
         animeFacadeInstance = new AnimeFacade(['div', 'ul', 'span'], {

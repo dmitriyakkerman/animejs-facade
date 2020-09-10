@@ -6,7 +6,7 @@ const easings = require('../src/js/easings');
 describe('AnimeFacade Tests', () => {
 
     let animeFacadeInstance;
-    let matchedArray = [
+    let params = [
         {
             translateX: [0, '100px'],
             width: [0, '100px'],
@@ -31,26 +31,7 @@ describe('AnimeFacade Tests', () => {
         animeFacadeInstance = new AnimeFacade(['div', 'ul', 'span'], {
             preset: {
                 name: 'someAnimation',
-                params: [
-                    {
-                        translateX: [0, '100px'],
-                        width: [0, '100px'],
-                        duration: 1000,
-                        delay: 500
-                    },
-                    {
-                        translateY: [0, '100px'],
-                        duration: 1000,
-                        delay: 300,
-                        offset: -500
-                    },
-                    {
-                        scale: [0, 2],
-                        height: [0, '10px'],
-                        duration: 1000,
-                        offset: 1000
-                    }
-                ]
+                params: params
             }
         });
     })
@@ -85,7 +66,7 @@ describe('AnimeFacade Tests', () => {
     test('AnimeFacade should have additional array of params for preset customization', () => {
         expect(animeFacadeInstance.options.preset.params).toBeDefined();
         expect(animeFacadeInstance.options.preset.params).toBeInstanceOf(Array);
-        expect(animeFacadeInstance.options.preset.params).toEqual(matchedArray);
+        expect(animeFacadeInstance.options.preset.params).toEqual(params);
     })
 
 })

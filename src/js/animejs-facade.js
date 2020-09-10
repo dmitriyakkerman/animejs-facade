@@ -164,6 +164,18 @@ const easings = require('./easings');
         })
     }
 
+    _setTimelineFromChosenPreset() {
+        let that = this;
+
+        this.targets.forEach(function (target, targetIndex) {
+            that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
+                if(targetIndex === chosenPresetIndex) {
+                    that._mergeTimelineOptions(target, chosenPreset)
+                }
+            })
+        })
+    }
+
     _setCustomEasing() {
         this._checkCustomParams().forEach(function(customParams) {
             for(let customParam in customParams) {
@@ -176,18 +188,6 @@ const easings = require('./easings');
                     }
                 }
             }
-        })
-    }
-
-    _setTimelineFromChosenPreset() {
-        let that = this;
-
-        this.targets.forEach(function (target, targetIndex) {
-            that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
-                if(targetIndex === chosenPresetIndex) {
-                    that._mergeTimelineOptions(target, chosenPreset)
-                }
-            })
         })
     }
 

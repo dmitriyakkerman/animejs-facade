@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dmitriyakkerman/animejs-facade.svg?branch=master)](https://travis-ci.org/dmitriyakkerman/animejs-facade)
+
 **Download:**
 
 _1. Download Anime.js via npm or manual download:_

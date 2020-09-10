@@ -110,10 +110,6 @@ const easings = require('./easings');
         return validEasing;
     }
 
-    _checkCustomParams() {
-        return this.preset.params;
-    }
-
     _initTimeLine() {
         this._setDefaultTimelineOptions();
         this._setTimelineAnimations();
@@ -132,7 +128,7 @@ const easings = require('./easings');
 
     _setTimelineAnimations() {
 
-        if(this._checkCustomParams()) {
+        if(this.preset.params) {
             this._setTimelineFromCustomParams();
         }
         else {
@@ -144,7 +140,7 @@ const easings = require('./easings');
         let that = this;
 
         this.targets.forEach(function (target, targetIndex) {
-            that._checkCustomParams().forEach(function(customParams, customParamsIndex) {
+            that.preset.params.forEach(function(customParams, customParamsIndex) {
                 that._getChosenPreset().forEach(function(chosenPreset) {
                     for(let customParam in customParams) {
                         if(customParams.hasOwnProperty(customParam)) {
@@ -177,7 +173,7 @@ const easings = require('./easings');
     }
 
     _setCustomEasing() {
-        this._checkCustomParams().forEach(function(customParams) {
+        this.preset.params.forEach(function(customParams) {
             for(let customParam in customParams) {
                 if(customParams.hasOwnProperty(customParam)) {
                     if(customParam === 'easing') {

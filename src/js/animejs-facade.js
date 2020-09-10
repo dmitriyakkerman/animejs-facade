@@ -122,7 +122,7 @@ import {easings} from "./easings";
 
     _setDefaultTimelineOptions() {
         this._timeline = anime.timeline({
-            easing: this._getChosenEasing(),
+            easing: this._getChosenEasing() || defaults.easing,
             duration: this.options.duration || defaults.duration,
             delay: this.options.delay || defaults.delay,
             loop: this.options.loop || defaults.loop,

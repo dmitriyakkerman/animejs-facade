@@ -5,9 +5,55 @@ const easings = require('../src/js/easings');
 
 describe('AnimeFacade Tests', () => {
 
-    test('AnimeFacade should be defined', () => {
-        expect(AnimeFacade).toBeDefined();
-    });
+    let animeFacadeInstance;
+    let matchedArray = [
+        {
+            translateX: [0, '100px'],
+            width: [0, '100px'],
+            duration: 1000,
+            delay: 500
+        },
+        {
+            translateY: [0, '100px'],
+            duration: 1000,
+            delay: 300,
+            offset: -500
+        },
+        {
+            scale: [0, 2],
+            height: [0, '10px'],
+            duration: 1000,
+            offset: 1000
+        }
+    ]
+
+    beforeEach(() => {
+        animeFacadeInstance = new AnimeFacade(['div', 'ul', 'span'], {
+            preset: {
+                name: 'someAnimation',
+                params: [
+                    {
+                        translateX: [0, '100px'],
+                        width: [0, '100px'],
+                        duration: 1000,
+                        delay: 500
+                    },
+                    {
+                        translateY: [0, '100px'],
+                        duration: 1000,
+                        delay: 300,
+                        offset: -500
+                    },
+                    {
+                        scale: [0, 2],
+                        height: [0, '10px'],
+                        duration: 1000,
+                        offset: 1000
+                    }
+                ]
+            }
+        });
+    })
 
     test('Defaults should be defined', () => {
         expect(defaults).toBeDefined();
@@ -20,5 +66,26 @@ describe('AnimeFacade Tests', () => {
     test('Easings should be defined', () => {
         expect(easings).toBeDefined();
     });
+
+    test('AnimeFacade should be defined', () => {
+        expect(AnimeFacade).toBeDefined();
+    });
+
+    test('AnimeFacade should receive array of 3 target elements', () => {
+        expect(animeFacadeInstance.targets).toBeDefined();
+        expect(animeFacadeInstance.targets).toBeInstanceOf(Array);
+        expect(animeFacadeInstance.targets.length).toBe(3);
+    });
+
+    test('AnimeFacade should have preset option named "someAnimation" ', () => {
+        expect(animeFacadeInstance.options).toBeDefined();
+        expect(animeFacadeInstance.options.preset.name).toBe("someAnimation");
+    });
+
+    test('AnimeFacade should have additional array of params for preset customization', () => {
+        expect(animeFacadeInstance.options.preset.params).toBeDefined();
+        expect(animeFacadeInstance.options.preset.params).toBeInstanceOf(Array);
+        expect(animeFacadeInstance.options.preset.params).toEqual(matchedArray);
+    })
 
 })

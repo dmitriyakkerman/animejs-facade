@@ -32,10 +32,9 @@ import {easings} from "./easings";
     }
 
     _initBase() {
-
         let that = this;
 
-        document.querySelectorAll(that.targets).forEach(function(targetElement) {
+        document.querySelectorAll(this.targets).forEach(function(targetElement) {
             let windowHeight = window.innerHeight;
             let targetPosition = targetElement.getBoundingClientRect().top;
             if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
@@ -50,7 +49,6 @@ import {easings} from "./easings";
     }
 
     _initOnScroll() {
-
         let that = this;
 
         window.addEventListener('scroll', function() {
@@ -59,7 +57,6 @@ import {easings} from "./easings";
     }
 
     _getChosenPreset() {
-
         let chosenPreset;
 
         for (let preset in presets) {
@@ -74,9 +71,7 @@ import {easings} from "./easings";
     }
 
     _getChosenEasing() {
-
         let that = this;
-
         let chosenEasing;
 
         easings.forEach(function (easing) {
@@ -93,7 +88,6 @@ import {easings} from "./easings";
     }
 
     _validateChosenEasing() {
-
         let validEasing;
 
         if(this.options.easing) {
@@ -127,55 +121,60 @@ import {easings} from "./easings";
     }
 
     _setDefaultTimelineOptions() {
-
-        let that = this;
-
         this._timeline = anime.timeline({
-            easing: that._getChosenEasing(),
-            duration: that.options.duration || defaults.duration,
-            delay: that.options.delay || defaults.delay,
-            loop: that.options.loop || defaults.loop,
-            direction: that.options.direction || defaults.direction,
-            autoplay: that.options.autoplay || defaults.autoplay
+            easing: this._getChosenEasing(),
+            duration: this.options.duration || defaults.duration,
+            delay: this.options.delay || defaults.delay,
+            loop: this.options.loop || defaults.loop,
+            direction: this.options.direction || defaults.direction,
+            autoplay: this.options.autoplay || defaults.autoplay
         });
     }
 
     _setTimelineAnimations() {
+        if(this._checkCustomizedParams()) {
+            this._setTimelineFromCustomizedParams();
+        }
+        else {
+            this._setTimelineFromChosenPreset();
+        }
+    }
 
+    _setTimelineFromCustomizedParams() {
         let that = this;
 
-        if(that._checkCustomizedParams()) {
-            that.targets.forEach(function (target, targetIndex) {
-                that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
-                    that._getChosenPreset().forEach(function(chosenPreset) {
-                        for(let customizedParam in customizedParams) {
-                            if(customizedParams.hasOwnProperty(customizedParam)) {
-                                for(let preset in chosenPreset) {
-                                    if(chosenPreset.hasOwnProperty(preset)) {
-                                        if(customizedParam === preset && targetIndex === customizedParamsIndex) {
-                                            that._mergeTimelineOptions(target, customizedParams)
-                                        }
+        this.targets.forEach(function (target, targetIndex) {
+            that._checkCustomizedParams().forEach(function(customizedParams, customizedParamsIndex) {
+                that._getChosenPreset().forEach(function(chosenPreset) {
+                    for(let customizedParam in customizedParams) {
+                        if(customizedParams.hasOwnProperty(customizedParam)) {
+                            for(let preset in chosenPreset) {
+                                if(chosenPreset.hasOwnProperty(preset)) {
+                                    if(customizedParam === preset && targetIndex === customizedParamsIndex) {
+                                        that._mergeTimelineOptions(target, customizedParams)
                                     }
                                 }
                             }
                         }
-                    })
-                })
-            })
-        }
-        else {
-            that.targets.forEach(function (target, targetIndex) {
-                that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
-                    if(targetIndex === chosenPresetIndex) {
-                        that._mergeTimelineOptions(target, chosenPreset)
                     }
                 })
             })
-        }
+        })
+    }
+
+    _setTimelineFromChosenPreset() {
+        let that = this;
+
+        this.targets.forEach(function (target, targetIndex) {
+            that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
+                if(targetIndex === chosenPresetIndex) {
+                    that._mergeTimelineOptions(target, chosenPreset)
+                }
+            })
+        })
     }
 
     _mergeTimelineOptions(target, presets) {
-
         this._timeline.add(
             Object.assign({
                 targets: target

@@ -5,4 +5,5 @@ module.exports = {
     loop: false,
     direction: 'normal',
     autoplay: true,
+    round: 1
 };

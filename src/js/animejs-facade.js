@@ -122,7 +122,8 @@ const easings = require('./easings');
             delay: this.options.delay || defaults.delay,
             loop: this.options.loop || defaults.loop,
             direction: this.options.direction || defaults.direction,
-            autoplay: this.options.autoplay || defaults.autoplay
+            autoplay: this.options.autoplay || defaults.autoplay,
+            round: this.options.round || defaults.round,
         });
     }
 

@@ -1,3 +1,5 @@
+let count = 8
+
 module.exports = {
     headerAnimation: [
         {
@@ -14,5 +16,10 @@ module.exports = {
         {
             translateX: [0, '100%']
         },
+    ],
+    numberAnimation: [
+        {
+            innerHTML: [0, 100],
+        }
     ]
 };

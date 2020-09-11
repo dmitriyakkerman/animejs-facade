@@ -75,7 +75,7 @@ const easings = require('./easings');
 
         for(let easing in easings) {
             if(easings.hasOwnProperty(easing)) {
-                if(AnimeFacade.validateEasing(easingToSet) === e) {
+                if(AnimeFacade.validateEasing(easingToSet) === easing) {
                     chosenEasing = easings[easing];
                 }
             }

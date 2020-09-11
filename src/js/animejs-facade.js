@@ -73,15 +73,13 @@ const easings = require('./easings');
     static getChosenEasing(easingToSet) {
         let chosenEasing;
 
-        easings.forEach(function (easing) {
-            for(let e in easing) {
-                if(easing.hasOwnProperty(e)) {
-                    if(AnimeFacade.validateEasing(easingToSet) === e) {
-                        chosenEasing = easing[e];
-                    }
+        for(let easing in easings) {
+            if(easings.hasOwnProperty(easing)) {
+                if(AnimeFacade.validateEasing(easingToSet) === e) {
+                    chosenEasing = easings[easing];
                 }
             }
-        });
+        }
 
         return chosenEasing;
     }

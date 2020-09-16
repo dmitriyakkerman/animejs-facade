@@ -41,7 +41,7 @@ const presets = require('./presets');
             if(!targetElement.classList.contains('animated')) {
                 let windowHeight = window.innerHeight;
                 let targetPosition = targetElement.getBoundingClientRect().top;
-                if (targetPosition - windowHeight <= 0) {
+                if (targetPosition - windowHeight >= -10 && targetPosition - windowHeight <= 0) {
                     that._initTimeline();
                     targetElement.classList.add('animated');
                 }

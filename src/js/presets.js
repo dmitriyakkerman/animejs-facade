@@ -7,6 +7,7 @@ const fadeInRight = require('./presets/fade/fadeInRight');
 const scaleIn = require('./presets/scale/scaleIn');
 const scaleOut = require('./presets/scale/scaleOut');
 const scaleInRotateRight = require('./presets/combined/scaleInRotateRight');
+const round = require('./presets/other/round');
 
 module.exports = {
     fadeIn,
@@ -17,5 +18,6 @@ module.exports = {
     fadeInRight,
     scaleIn,
     scaleOut,
-    scaleInRotateRight
+    scaleInRotateRight,
+    round
 };

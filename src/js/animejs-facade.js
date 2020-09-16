@@ -108,7 +108,6 @@ const presets = require('./presets');
     _initTimeline() {
         this._setTimelineOptions();
         this._setTargetSettings();
-        alert()
     }
   }
 

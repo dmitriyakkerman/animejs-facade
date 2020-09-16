@@ -67,7 +67,7 @@ const presets = require('./presets');
         for (let preset in presets) {
             if(presets.hasOwnProperty(preset)) {
                 if(this.preset.name === preset) {
-                    chosenPreset = presets[preset]
+                    chosenPreset = presets[preset];
                 }
             }
         }
@@ -82,7 +82,7 @@ const presets = require('./presets');
             delay: this.options.delay || defaults.delay,
             direction: this.options.direction || defaults.direction,
             autoplay: this.options.autoplay || defaults.autoplay,
-        })
+        });
     }
 
     _setTargetSettings() {
@@ -102,20 +102,13 @@ const presets = require('./presets');
     }
 
     _mergeTimeline(target, settings, offset = null) {
-        this.timeline.add(
-            Object.assign({
-                    targets: target
-                },
-                settings
-            ), offset
-        )
+        this.timeline.add(Object.assign({ targets: target }, settings), offset);
     }
 
     _initTimeline() {
         this._setTimelineOptions();
         this._setTargetSettings();
     }
-
   }
 
   window.AnimeFacade = AnimeFacade;

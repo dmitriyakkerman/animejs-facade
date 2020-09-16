@@ -57,7 +57,9 @@ const presets = require('./presets');
         let that = this;
 
         window.addEventListener('scroll', function() {
-            that._initBase();
+            window.requestAnimationFrame(function() {
+                that._initBase();
+            });
         })
     }
 

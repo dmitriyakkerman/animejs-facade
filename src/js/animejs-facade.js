@@ -91,16 +91,14 @@ const presets = require('./presets');
         let that = this;
         let targetSetting = {};
 
-
-            if(!that.preset.params) {
-                targetSetting = that._getChosenPreset();
-                that._mergeTimeline(target, targetSetting);
-            }
-            else {
-                targetSetting = Object.assign(that._getChosenPreset(), that.preset.params);
-                that._mergeTimeline(target, targetSetting, that.preset.params.offset)
-            }
-
+        if(!that.preset.params) {
+            targetSetting = that._getChosenPreset();
+            that._mergeTimeline(target, targetSetting);
+        }
+        else {
+            targetSetting = Object.assign(that._getChosenPreset(), that.preset.params);
+            that._mergeTimeline(target, targetSetting, that.preset.params.offset)
+        }
     }
 
     _mergeTimeline(target, settings, offset = null) {

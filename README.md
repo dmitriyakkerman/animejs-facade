@@ -36,7 +36,7 @@ Markup:
 
 _Preset with default options:_
 
-    new AnimeFacade(['.logo'], {
+    new AnimeFacade('.logo', {
         preset: {
             name: 'scaleIn'
         }
@@ -44,7 +44,7 @@ _Preset with default options:_
 
 _Preset with custom options:_
 
-    new AnimeFacade(['.logo'], {
+    new AnimeFacade('.logo', {
         preset: {
             name: 'scaleIn',
             params: {

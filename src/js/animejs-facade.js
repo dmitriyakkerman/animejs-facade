@@ -22,7 +22,7 @@ const presets = require('./presets');
             throw new Error('Choose animation preset');
         }
 
-      this.targets = targets;
+      this.targets = [targets];
       this.options = options;
       this.preset = options.preset || {};
       this.timeline = null;

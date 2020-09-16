@@ -32,7 +32,32 @@ Script:
     <script src="anime.min.js"></script>
     <script src="./dist/js/animejs-facade.min.js"></script>
 
+Markup:
 
+_Preset with default options:_
+
+    new AnimeFacade(['.logo'], {
+        preset: {
+            name: 'scaleIn'
+        }
+    });    
+
+_Preset with custom options:_
+
+    new AnimeFacade(['.logo'], {
+        preset: {
+            name: 'scaleIn',
+            params: {
+                scale: [0, 1],
+                duration: 2500,
+                easing: "easeOutBounce",
+                offset: -500
+            }
+        },
+        direction: 'alternate'
+    });  
+
+    
     
     
     

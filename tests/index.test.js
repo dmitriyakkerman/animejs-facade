@@ -4,34 +4,20 @@ const presets = require('../src/js/presets');
 const easings = require('../src/js/easings');
 
 let animeFacadeInstance;
-let params = [
-    {
-        translateX: [0, '100px'],
-        width: [0, '100px'],
-        duration: 1000,
-        delay: 500
-    },
-    {
-        translateY: [0, '100px'],
-        duration: 1000,
-        delay: 300,
-        offset: -500
-    },
-    {
-        scale: [0, 2],
-        height: [0, '10px'],
-        duration: 1000,
-        offset: 1000
+let params = {
+    duration: 1000,
+        delay: function(el, i) {
+        return (i + 1) * 100
     }
-]
+}
 
 describe('AnimeFacade Tests', () => {
 
     beforeEach(() => {
-        animeFacadeInstance = new AnimeFacade(['div', 'ul', 'span'], {
+        animeFacadeInstance = new AnimeFacade(['.header li'], {
             preset: {
-                name: 'someAnimation',
-                params: params
+                name: 'fadeInDown',
+                params
             }
         });
     })
@@ -44,29 +30,25 @@ describe('AnimeFacade Tests', () => {
         expect(presets).toBeDefined();
     });
 
-    test('Easings should be defined', () => {
-        expect(easings).toBeDefined();
-    });
-
     test('AnimeFacade should be defined', () => {
         expect(AnimeFacade).toBeDefined();
     });
 
-    test('AnimeFacade should receive array of 3 target elements', () => {
+    test('AnimeFacade should receive array of 1 target element', () => {
         expect(animeFacadeInstance.targets).toBeDefined();
         expect(animeFacadeInstance.targets).toBeInstanceOf(Array);
-        expect(animeFacadeInstance.targets.length).toBe(3);
+        expect(animeFacadeInstance.targets.length).toBe(1);
     });
 
-    test('AnimeFacade should have preset option named "someAnimation" ', () => {
+    test('AnimeFacade should have preset named "fadeInDown" ', () => {
         expect(animeFacadeInstance.options).toBeDefined();
         expect(animeFacadeInstance.options.preset).toBeInstanceOf(Object);
-        expect(animeFacadeInstance.options.preset.name).toBe("someAnimation");
+        expect(animeFacadeInstance.options.preset.name).toBe("fadeInDown");
     });
 
     test('AnimeFacade should have additional array of params for preset customization', () => {
         expect(animeFacadeInstance.options.preset.params).toBeDefined();
-        expect(animeFacadeInstance.options.preset.params).toBeInstanceOf(Array);
+        expect(animeFacadeInstance.options.preset.params).toBeInstanceOf(Object);
         expect(animeFacadeInstance.options.preset.params).toEqual(params);
     })
 

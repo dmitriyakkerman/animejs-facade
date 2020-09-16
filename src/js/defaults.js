@@ -1,5 +1,5 @@
 module.exports = {
-    duration: 1000,
+    duration: 2000,
     easing: 'linear',
     delay: 0,
     loop: false,

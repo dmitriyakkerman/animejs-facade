@@ -1,6 +1,5 @@
 const defaults = require('./defaults');
 const presets = require('./presets');
-const easings = require('./easings');
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -19,33 +18,39 @@ const easings = require('./easings');
         throw new Error('No target selector');
       }
 
+        if(!options.preset) {
+            throw new Error('Choose animation preset');
+        }
+
       this.targets = targets;
       this.options = options;
       this.preset = options.preset || {};
-      this._timeline = null;
+      this.timeline = null;
       this._onInit();
     }
 
     _onInit() {
-        this._initOnScroll();
         this._initOnLoad();
+        this._initOnScroll();
     }
 
     _initBase() {
         let that = this;
 
-        document.querySelectorAll(this.targets).forEach(function(targetElement) {
-            let windowHeight = window.innerHeight;
-            let targetPosition = targetElement.getBoundingClientRect().top;
-            if (targetPosition - windowHeight <= 0 && !targetElement.classList.contains('animated')) {
-                that._initTimeLine();
-                targetElement.classList.add('animated');
+        document.querySelectorAll(that.targets).forEach(function(targetElement) {
+            if(!targetElement.classList.contains('animated')) {
+                let windowHeight = window.innerHeight;
+                let targetPosition = targetElement.getBoundingClientRect().top;
+                if (targetPosition - windowHeight <= 0) {
+                    that._initTimeline();
+                    targetElement.classList.add('animated');
+                }
             }
         })
     }
 
     _initOnLoad() {
-        this._initBase();
+       this._initBase();
     }
 
     _initOnScroll() {
@@ -70,129 +75,47 @@ const easings = require('./easings');
         return chosenPreset;
     }
 
-    static getChosenEasing(easingToSet) {
-        let chosenEasing;
-
-        for(let easing in easings) {
-            if(easings.hasOwnProperty(easing)) {
-                if(AnimeFacade.validateEasing(easingToSet) === easing) {
-                    chosenEasing = easings[easing];
-                }
-            }
-        }
-
-        return chosenEasing;
-    }
-
-    static validateEasing(easingToValidate) {
-        let validEasing;
-
-        if(easingToValidate) {
-            if(easingToValidate.indexOf("-") > -1) {
-                let splittedString = easingToValidate.split('-');
-                splittedString = splittedString.map(function (string, stringIndex) {
-                    if(stringIndex !== 0) {
-                        return string[0].toUpperCase() + string.slice(1);
-                    }
-
-                    return string;
-                });
-
-                validEasing = splittedString.join('')
-            }
-            else {
-                validEasing = easingToValidate;
-            }
-        }
-
-        return validEasing;
-    }
-
-    _initTimeLine() {
-        this._setDefaultTimelineOptions();
-        this._setTimelineAnimations();
-    }
-
-    _setDefaultTimelineOptions() {
-        this._timeline = anime.timeline({
-            easing: AnimeFacade.getChosenEasing(this.options.easing) || defaults.easing,
+    _setTimelineOptions() {
+        this.timeline = anime.timeline({
+            easing: this.options.easing || defaults.easing,
             duration: this.options.duration || defaults.duration,
             delay: this.options.delay || defaults.delay,
-            loop: this.options.loop || defaults.loop,
             direction: this.options.direction || defaults.direction,
             autoplay: this.options.autoplay || defaults.autoplay,
-            round: this.options.round || defaults.round,
-        });
-    }
-
-    _setTimelineAnimations() {
-
-        if(this.preset.params) {
-            this._setTimelineFromCustomParams();
-        }
-        else {
-            this._setTimelineFromChosenPreset();
-        }
-    }
-
-    _setTimelineFromCustomParams() {
-        let that = this;
-
-        this.targets.forEach(function (target, targetIndex) {
-            that.preset.params.forEach(function(customParams, customParamsIndex) {
-                that._getChosenPreset().forEach(function(chosenPreset) {
-                    for(let customParam in customParams) {
-                        if(customParams.hasOwnProperty(customParam)) {
-                            for(let preset in chosenPreset) {
-                                if(chosenPreset.hasOwnProperty(preset)) {
-                                    that._setCustomEasing();
-
-                                    if(customParam === preset && targetIndex === customParamsIndex) {
-                                        that._mergeTimelineOptions(target, customParams, customParams['offset'])
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-            })
         })
     }
 
-    _setTimelineFromChosenPreset() {
+    _setTargetSettings() {
         let that = this;
+        let targetSetting = {};
 
-        this.targets.forEach(function (target, targetIndex) {
-            that._getChosenPreset().forEach(function(chosenPreset, chosenPresetIndex) {
-                if(targetIndex === chosenPresetIndex) {
-                    that._mergeTimelineOptions(target, chosenPreset)
-                }
-            })
-        })
-    }
-
-    _setCustomEasing() {
-        this.preset.params.forEach(function(customParams) {
-            for(let customParam in customParams) {
-                if(customParams.hasOwnProperty(customParam)) {
-                    if(customParam === 'easing') {
-                        Object.defineProperty(customParams, 'easing', {
-                            writable: true,
-                            value: AnimeFacade.getChosenEasing(AnimeFacade.validateEasing(customParams[customParam]))
-                        })
-                    }
-                }
+        that.targets.forEach(function (target) {
+            if(!that.preset.params) {
+                targetSetting = that._getChosenPreset();
+                that._mergeTimeline(target, targetSetting);
+            }
+            else {
+                targetSetting = Object.assign(that._getChosenPreset(), that.preset.params);
+                that._mergeTimeline(target, targetSetting, that.preset.params.offset)
             }
         })
     }
 
-    _mergeTimelineOptions(target, presets, offset) {
-        this._timeline.add(
+    _mergeTimeline(target, settings, offset = null) {
+        this.timeline.add(
             Object.assign({
-                targets: target
-            }, presets), offset
+                    targets: target
+                },
+                settings
+            ), offset
         )
     }
+
+    _initTimeline() {
+        this._setTimelineOptions();
+        this._setTargetSettings();
+    }
+
   }
 
   window.AnimeFacade = AnimeFacade;

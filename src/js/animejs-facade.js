@@ -41,8 +41,8 @@ const presets = require('./presets');
             if(!targetElement.classList.contains('animated')) {
                 let windowHeight = window.innerHeight;
                 let targetPosition = targetElement.getBoundingClientRect().top;
-                if (targetPosition - windowHeight >= -10 && targetPosition - windowHeight <= 0) {
-                    that._initTimeline();
+                if (targetPosition - windowHeight <= 0) {
+                    that._initTimeline(targetElement);
                     targetElement.classList.add('animated');
                 }
             }
@@ -87,11 +87,11 @@ const presets = require('./presets');
         });
     }
 
-    _setTargetSettings() {
+    _setTargetSettings(target) {
         let that = this;
         let targetSetting = {};
 
-        that.targets.forEach(function (target) {
+
             if(!that.preset.params) {
                 targetSetting = that._getChosenPreset();
                 that._mergeTimeline(target, targetSetting);
@@ -100,16 +100,16 @@ const presets = require('./presets');
                 targetSetting = Object.assign(that._getChosenPreset(), that.preset.params);
                 that._mergeTimeline(target, targetSetting, that.preset.params.offset)
             }
-        })
+
     }
 
     _mergeTimeline(target, settings, offset = null) {
         this.timeline.add(Object.assign({ targets: target }, settings), offset);
     }
 
-    _initTimeline() {
+    _initTimeline(target) {
         this._setTimelineOptions();
-        this._setTargetSettings();
+        this._setTargetSettings(target);
     }
   }
 

@@ -42,7 +42,10 @@ const presets = require('./presets');
                 let windowHeight = window.innerHeight;
                 let targetPosition = targetElement.getBoundingClientRect().top;
                 if (targetPosition - windowHeight <= 0) {
-                    that._initTimeline(targetElement);
+                    window.requestAnimationFrame(function() {
+                      that._initTimeline(targetElement);
+                    });
+                  
                     targetElement.classList.add('animated');
                 }
             }
@@ -57,9 +60,7 @@ const presets = require('./presets');
         let that = this;
 
         window.addEventListener('scroll', function() {
-            window.requestAnimationFrame(function() {
-                that._initBase();
-            });
+          that._initBase();           
         })
     }
 

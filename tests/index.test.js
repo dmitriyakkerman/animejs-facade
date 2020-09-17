@@ -1,7 +1,6 @@
 const AnimeFacade = require('../src/js/animejs-facade');
 const defaults = require('../src/js/defaults');
 const presets = require('../src/js/presets');
-const easings = require('../src/js/easings');
 
 let animeFacadeInstance;
 let params = {
@@ -13,14 +12,20 @@ let params = {
 
 describe('AnimeFacade Tests', () => {
 
+    document.body.innerHTML = `
+    <div class="header">
+        <li></li>
+    </div>
+  `;
+
     beforeEach(() => {
-        animeFacadeInstance = new AnimeFacade(['.header li'], {
+        animeFacadeInstance = new AnimeFacade('.header li', {
             preset: {
                 name: 'fadeInDown',
                 params
             }
-        });
-    })
+        })
+    });
 
     test('Defaults should be defined', () => {
         expect(defaults).toBeDefined();
@@ -50,6 +55,6 @@ describe('AnimeFacade Tests', () => {
         expect(animeFacadeInstance.options.preset.params).toBeDefined();
         expect(animeFacadeInstance.options.preset.params).toBeInstanceOf(Object);
         expect(animeFacadeInstance.options.preset.params).toEqual(params);
-    })
+    });
 
 })

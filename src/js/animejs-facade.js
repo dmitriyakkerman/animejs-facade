@@ -104,7 +104,6 @@ const presets = require('./presets');
     }
 
     _mergeTimeline(target, settings, offset = null) {
-        console.log(target)
         this.timeline.add(Object.assign({ targets: target }, settings), offset);
     }
 

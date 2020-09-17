@@ -29,17 +29,19 @@ describe('AnimeFacade Tests', () => {
 
     test('Defaults should be defined', () => {
         expect(defaults).toBeDefined();
+        expect(defaults).toBeInstanceOf(Object);
     });
 
     test('Presets should be defined', () => {
         expect(presets).toBeDefined();
+        expect(presets).toBeInstanceOf(Object);
     });
 
     test('AnimeFacade should be defined', () => {
         expect(AnimeFacade).toBeDefined();
     });
 
-    test('AnimeFacade should receive array of 1 target element', () => {
+    test('AnimeFacade should receive target element', () => {
         expect(animeFacadeInstance.targets).toBeDefined();
         expect(animeFacadeInstance.targets).toBeInstanceOf(Array);
         expect(animeFacadeInstance.targets.length).toBe(1);

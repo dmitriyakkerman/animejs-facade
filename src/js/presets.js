@@ -8,6 +8,7 @@ const scaleIn = require('./presets/scale/scaleIn');
 const scaleOut = require('./presets/scale/scaleOut');
 const scaleInRotateRight = require('./presets/combined/scaleInRotateRight');
 const numIn = require('./presets/other/numIn');
+const drawIn = require('./presets/other/drawIn');
 
 module.exports = {
     fadeIn,
@@ -19,5 +20,6 @@ module.exports = {
     scaleIn,
     scaleOut,
     scaleInRotateRight,
-    numIn
+    numIn,
+    drawIn
 };

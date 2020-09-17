@@ -37,16 +37,17 @@ const presets = require('./presets');
     _initBase() {
         let that = this;
 
-        document.querySelectorAll(that.targets).forEach(function(targetElement) {
-            if(!targetElement.classList.contains('animated')) {
+        that.targets.forEach(function(targetElement) {
+            let node = document.querySelector(targetElement);
+
+            if(!node.classList.contains('animated')) {
                 let windowHeight = window.innerHeight;
-                let targetPosition = targetElement.getBoundingClientRect().top;
+                let targetPosition = node.getBoundingClientRect().top;
                 if (targetPosition - windowHeight <= 0) {
                     window.requestAnimationFrame(function() {
                       that._initTimeline(targetElement);
                     });
-                  
-                    targetElement.classList.add('animated');
+                    node.classList.add('animated');
                 }
             }
         })
@@ -103,6 +104,7 @@ const presets = require('./presets');
     }
 
     _mergeTimeline(target, settings, offset = null) {
+        console.log(target)
         this.timeline.add(Object.assign({ targets: target }, settings), offset);
     }
 

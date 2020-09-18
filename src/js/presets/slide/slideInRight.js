@@ -3,7 +3,7 @@
 module.exports = {
     width: [0, '100%'],
     easing: "easeInQuint",
-    duration: 2000,
+    duration: 1500,
     complete: function(anim) {
         if(anime) {
             anime({

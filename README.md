@@ -56,9 +56,3 @@ _Preset with custom options:_
         },
         direction: 'alternate'
     });  
-
-    
-    
-    
-    
-    

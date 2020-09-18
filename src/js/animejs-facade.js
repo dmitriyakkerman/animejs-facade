@@ -18,8 +18,8 @@ const presets = require('./presets');
         throw new Error('No target selector');
       }
 
-        if(!options.preset) {
-            throw new Error('Choose animation preset');
+        if(!options.preset && !options.custom) {
+            throw new Error('Choose animation preset or write custom params');
         }
 
       this.targets = [targets];
@@ -93,13 +93,18 @@ const presets = require('./presets');
         let that = this;
         let targetSetting = {};
 
-        if(!that.preset.params) {
-            targetSetting = that._getChosenPreset();
-            that._mergeTimeline(target, targetSetting);
+        if(that.options.custom) {
+            that._mergeTimeline(target, that.options.custom.params);
         }
-        else {
-            targetSetting = Object.assign(that._getChosenPreset(), that.preset.params);
-            that._mergeTimeline(target, targetSetting, that.preset.params.offset)
+        else if(that.preset) {
+            if(!that.preset.params) {
+                targetSetting = that._getChosenPreset();
+                that._mergeTimeline(target, targetSetting);
+            }
+            else {
+                targetSetting = Object.assign(that._getChosenPreset(), that.preset.params);
+                that._mergeTimeline(target, targetSetting, that.preset.params.offset)
+            }
         }
     }
 

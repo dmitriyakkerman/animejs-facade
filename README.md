@@ -56,3 +56,13 @@ _Preset with custom options:_
         },
         direction: 'alternate'
     });  
+
+_Instance with custom options without preset:_
+
+        new AnimeFacade('.logo', {
+            custom: {
+                params: {
+                    translateX: [0, '100px'],
+                }
+            }            
+        });

@@ -53,8 +53,7 @@ _Preset with custom options:_
                 easing: "easeOutBounce",
                 offset: -500
             }
-        },
-        direction: 'alternate'
+        }
     });  
 
 _Instance with custom options without preset:_

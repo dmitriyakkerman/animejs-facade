@@ -25,7 +25,7 @@ ES6 import:
 Require:
     
     const anime = require('animejs');
-    const animeFacade = require('animejs-facade.min.js');
+    const AnimeFacade = require('animejs-facade.min.js');
     
 Script:
 

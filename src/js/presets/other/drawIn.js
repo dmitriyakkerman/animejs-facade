@@ -1,10 +1,10 @@
 //Прорисовка обводки svg элемента
 
+const anime = require('../../anime.min');
+
 module.exports = {
     strokeDashoffset: function () {
-        if(anime) {
-            return [anime.setDashoffset, 0]
-        }
+        return [anime.setDashoffset, 0]
     },
     easing: 'easeInOutSine',
     duration: 1500,

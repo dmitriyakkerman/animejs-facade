@@ -1,3 +1,4 @@
+const anime = require('./anime.min');
 const defaults = require('./defaults');
 const presets = require('./presets');
 

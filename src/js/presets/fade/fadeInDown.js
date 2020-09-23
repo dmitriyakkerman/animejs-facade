@@ -2,10 +2,7 @@
 
 module.exports = {
     opacity: [0, 1],
-    translateY: ['-50px', 0],
-    duration: 500,
-    delay: function(el, i) {
-        return i * 100
-    },
+    translateY: ['-100px', 0],
+    duration: 1000,
     easing: "easeOutExpo"
 }

@@ -2,7 +2,6 @@
 
 module.exports = {
     scale: [1, 0],
-    duration: 1500,
-    delay: 200,
+    duration: 1000,
     easing: "easeOutExpo"
 }

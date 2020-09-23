@@ -122,5 +122,4 @@ const presets = require('./presets');
   window.AnimeFacade = AnimeFacade;
 
   return AnimeFacade;
-
 }));

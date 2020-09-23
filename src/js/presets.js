@@ -4,13 +4,11 @@ const fadeInUp = require('./presets/fade/fadeInUp');
 const fadeInDown = require('./presets/fade/fadeInDown');
 const fadeInLeft = require('./presets/fade/fadeInLeft');
 const fadeInRight = require('./presets/fade/fadeInRight');
-const scaleIn = require('./presets/scale/scaleIn');
-const scaleOut = require('./presets/scale/scaleOut');
-const scaleInHeight = require('./presets/scale/scaleInHeight');
-const scaleInRotateRight = require('./presets/combined/scaleInRotateRight');
-const numIn = require('./presets/other/numIn');
-const drawIn = require('./presets/other/drawIn');
-const slideInRight = require('./presets/slide/slideInRight');
+const scale = require('./presets/scale/scale');
+const squeeze = require('./presets/scale/squeeze');
+const slideRight = require('./presets/combined/slideRight');
+const num = require('./presets/other/num');
+const draw = require('./presets/other/draw');
 
 module.exports = {
     fadeIn,
@@ -19,11 +17,9 @@ module.exports = {
     fadeInDown,
     fadeInLeft,
     fadeInRight,
-    scaleIn,
-    scaleOut,
-    scaleInRotateRight,
-    numIn,
-    drawIn,
-    scaleInHeight,
-    slideInRight
+    scale,
+    squeeze,
+    slideRight,
+    num,
+    draw
 };

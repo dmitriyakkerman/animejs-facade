@@ -3,9 +3,6 @@
 module.exports = {
     opacity: [0, 1],
     translateX: [0, '100px'],
-    easing: "easeOutExpo",
     duration: 1000,
-    delay: function(el, i) {
-        return i * 150
-    }
+    easing: "easeOutExpo"
 }

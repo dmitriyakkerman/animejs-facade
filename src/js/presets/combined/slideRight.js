@@ -1,24 +1,24 @@
-//Выдвижение элемента из родительского блока
+//Выдвижение элемента из родительского блока: сначала первый дочерний блок, затем второй
 
 const anime = require('../../anime.min');
 
 module.exports = {
     width: [0, '100%'],
-    easing: "easeInQuint",
     duration: 1500,
+    easing: "easeInQuint",
     complete: function(anim) {
         anime({
             targets: anim.animatables[0].target.firstElementChild,
             translateX: '100%',
-            easing: "easeInOutQuart",
-            duration: 1000
+            duration: 1000,
+            easing: "easeInOutQuart"
         });
         anime({
             targets: anim.animatables[0].target.lastElementChild,
             scale: [1.2, 1],
-            easing: "easeOutCirc",
             duration: 1800,
-            delay: 100
+            delay: 100,
+            easing: "easeOutCirc"
         });
     }
 }

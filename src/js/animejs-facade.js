@@ -71,8 +71,11 @@ const presets = require('./presets');
 
         for (let preset in presets) {
             if(presets.hasOwnProperty(preset)) {
-                if(this.preset.name === preset) {
-                    chosenPreset = presets[preset];
+                if(presets[this.preset.name]) {
+                    chosenPreset = presets[this.preset.name];
+                }
+                else {
+                    throw new Error(`Chosen preset "${this.preset.name}" doesn\'t exist`)
                 }
             }
         }

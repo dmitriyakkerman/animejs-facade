@@ -19,9 +19,9 @@ const presets = require('./presets');
         throw new Error('No target selector');
       }
 
-        if(!options.preset && !options.custom) {
-            throw new Error('Choose animation preset or write custom params');
-        }
+      if(!options.preset && !options.custom) {
+        throw new Error('Choose animation preset or write custom params');
+      }
 
       this.targets = [targets];
       this.options = options;

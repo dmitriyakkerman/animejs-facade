@@ -6,7 +6,8 @@ const fadeInLeft = require('./presets/fade/fadeInLeft');
 const fadeInRight = require('./presets/fade/fadeInRight');
 const scale = require('./presets/scale/scale');
 const squeeze = require('./presets/scale/squeeze');
-const slideRight = require('./presets/combined/slideRight');
+const slideInUp = require('./presets/slide/slideInUp');
+const slideRightScale = require('./presets/slide/slideRightScale');
 const num = require('./presets/other/num');
 const draw = require('./presets/other/draw');
 
@@ -19,7 +20,8 @@ module.exports = {
     fadeInRight,
     scale,
     squeeze,
-    slideRight,
+    slideInUp,
+    slideRightScale,
     num,
     draw
 };

@@ -15,6 +15,8 @@ const draw = require('./presets/other/draw');
 const textIn = require('./presets/text/textIn');
 const textRotate = require('./presets/text/textRotate');
 const textType = require('./presets/text/textType');
+const textInLeft = require('./presets/text/textInLeft');
+const textInRight = require('./presets/text/textInRight');
 
 module.exports = {
     fadeIn,
@@ -33,5 +35,7 @@ module.exports = {
     draw,
     textIn,
     textRotate,
-    textType
+    textType,
+    textInLeft,
+    textInRight
 };

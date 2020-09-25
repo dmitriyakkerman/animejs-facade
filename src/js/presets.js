@@ -12,6 +12,7 @@ const slideRightScale = require('./presets/slide/slideRightScale');
 const slideUpStretch = require('./presets/slide/slideUpStretch');
 const num = require('./presets/other/num');
 const draw = require('./presets/other/draw');
+const textIn = require('./presets/text/textIn');
 
 module.exports = {
     fadeIn,
@@ -27,5 +28,6 @@ module.exports = {
     slideRightScale,
     slideUpStretch,
     num,
-    draw
+    draw,
+    textIn
 };

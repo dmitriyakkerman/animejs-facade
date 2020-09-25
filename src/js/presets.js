@@ -14,6 +14,7 @@ const num = require('./presets/other/num');
 const draw = require('./presets/other/draw');
 const textIn = require('./presets/text/textIn');
 const textRotate = require('./presets/text/textRotate');
+const textType = require('./presets/text/textType');
 
 module.exports = {
     fadeIn,
@@ -31,5 +32,6 @@ module.exports = {
     num,
     draw,
     textIn,
-    textRotate
+    textRotate,
+    textType
 };

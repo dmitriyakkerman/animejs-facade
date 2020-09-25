@@ -1,4 +1,4 @@
-//
+//Эффект печати текста
 
 const anime = require('../../anime.min');
 

@@ -12,7 +12,9 @@ module.exports = {
             targets: '.letter',
             rotateY: [-90, 0],
             duration: 1300,
-            delay: (el, i) => 100 * i
+            delay: function(el, i) {
+                return i * 150
+            }
         });
     }
 }

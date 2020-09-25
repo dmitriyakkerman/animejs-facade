@@ -13,6 +13,7 @@ const slideUpStretch = require('./presets/slide/slideUpStretch');
 const num = require('./presets/other/num');
 const draw = require('./presets/other/draw');
 const textIn = require('./presets/text/textIn');
+const textRotate = require('./presets/text/textRotate');
 
 module.exports = {
     fadeIn,
@@ -29,5 +30,6 @@ module.exports = {
     slideUpStretch,
     num,
     draw,
-    textIn
+    textIn,
+    textRotate
 };

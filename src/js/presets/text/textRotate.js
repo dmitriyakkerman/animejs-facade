@@ -1,4 +1,4 @@
-//Появление текста буква за буквой с прозрачностью
+//Появление текста буква за буквой с поворотом по оси Y
 
 const anime = require('../../anime.min');
 
@@ -10,12 +10,9 @@ module.exports = {
     complete: function(anim) {
         anime({
             targets: '.letter',
-            opacity: [0, 1],
-            easing: "easeInOutQuad",
-            duration: 500,
-            delay: function(el, i) {
-                return (i + 1) * 100
-            }
+            rotateY: [-90, 0],
+            duration: 1300,
+            delay: (el, i) => 100 * i
         });
     }
 }

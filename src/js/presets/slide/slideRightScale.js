@@ -3,7 +3,9 @@
 const anime = require('../../anime.min');
 
 module.exports = {
-    width: [0, '100%'],
+    width: function(el) {
+        return [0, window.getComputedStyle(el).width]
+    },
     duration: 1500,
     easing: "easeInQuint",
     complete: function(anim) {

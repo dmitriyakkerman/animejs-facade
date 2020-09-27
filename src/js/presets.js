@@ -17,6 +17,8 @@ const textRotate = require('./presets/text/textRotate');
 const textType = require('./presets/text/textType');
 const textInLeft = require('./presets/text/textInLeft');
 const textInRight = require('./presets/text/textInRight');
+const textSlideInUp = require('./presets/text/textSlideInUp');
+const textSlideInDown = require('./presets/text/textSlideInDown');
 
 module.exports = {
     fadeIn,
@@ -37,5 +39,7 @@ module.exports = {
     textRotate,
     textType,
     textInLeft,
-    textInRight
+    textInRight,
+    textSlideInUp,
+    textSlideInDown
 };

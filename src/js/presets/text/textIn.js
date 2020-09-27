@@ -9,7 +9,7 @@ module.exports = {
     duration: 100,
     complete: function(anim) {
         anime({
-            targets: '.letter',
+            targets: anim.animatables[0].target.querySelectorAll('.letter'),
             opacity: [0, 1],
             easing: "easeInOutQuad",
             duration: 500,

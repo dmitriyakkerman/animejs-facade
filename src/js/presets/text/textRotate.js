@@ -9,7 +9,7 @@ module.exports = {
     duration: 100,
     complete: function(anim) {
         anime({
-            targets: '.letter',
+            targets: anim.animatables[0].target.querySelectorAll('.letter'),
             rotateY: [-90, 0],
             duration: 1300,
             delay: function(el, i) {

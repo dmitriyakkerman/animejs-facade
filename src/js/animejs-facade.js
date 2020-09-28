@@ -33,6 +33,7 @@ const presets = require('./presets');
     _onInit() {
         this._initOnLoad();
         this._initOnScroll();
+        Promise.resolve().finally();
     }
 
     _initBase() {

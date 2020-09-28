@@ -25,5 +25,8 @@
     "jest": "^26.4.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "core-js": "^2.6.11"
   }
 }

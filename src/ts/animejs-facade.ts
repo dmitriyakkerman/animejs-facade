@@ -1,3 +1,8 @@
+import {define} from "./globals/globals";
+import {windowAnimeFacadeInterface} from "./interfaces/windowAnimeFacadeInterface";
+
+declare let window: windowAnimeFacadeInterface;
+
 const anime = require('../js/anime.min');
 const defaults = require('../js/defaults');
 const presets = require('../js/presets');
@@ -13,7 +18,12 @@ const presets = require('../js/presets');
 }(typeof self !== 'undefined' ? self : this, function () {
 
   class AnimeFacade {
-    constructor(targets, options = {}) {
+    targets: Array<string>;
+    options: any;
+    preset: any;
+    timeline: any;
+
+    constructor(targets: string, options: any) {
 
       if(!targets) {
         throw new Error('No target selector');
@@ -23,30 +33,29 @@ const presets = require('../js/presets');
         throw new Error('Choose animation preset or write custom params');
       }
 
-      this.targets = [targets];
-      this.options = options;
-      this.preset = options.preset || {};
-      this.timeline = null;
-      this._onInit();
+      this.targets = [targets] as Array<string>;
+      this.options = options || {} as object;
+      this.preset = options.preset || {} as object;
+      this.onInit();
     }
 
-    _onInit() {
-        this._initOnLoad();
-        this._initOnScroll();
+    protected onInit(): void {
+        this.initOnLoad();
+        this.initOnScroll();
     }
 
-    _initBase() {
+    protected initBase(): void {
         let that = this;
 
-        that.targets.forEach(function(targetElement) {
-            let node = document.querySelector(targetElement);
+        that.targets.forEach(function(targetElement: string) {
+            let node = document.querySelector(targetElement) as HTMLElement;
 
             if(!node.classList.contains('animated')) {
                 let windowHeight = window.innerHeight;
                 let targetPosition = node.getBoundingClientRect().top;
                 if (targetPosition - windowHeight <= 0) {
                     window.requestAnimationFrame(function() {
-                      that._initTimeline(targetElement);
+                      that.initTimeline(targetElement);
                     });
                     node.classList.add('animated');
                 }
@@ -54,19 +63,19 @@ const presets = require('../js/presets');
         })
     }
 
-    _initOnLoad() {
-       this._initBase();
+    protected initOnLoad(): void {
+       this.initBase();
     }
 
-    _initOnScroll() {
+    protected initOnScroll(): void {
         let that = this;
 
         window.addEventListener('scroll', function() {
-          that._initBase();           
+          that.initBase();
         })
     }
 
-    _getChosenPreset() {
+    protected getChosenPreset(): object {
         let chosenPreset;
 
         for (let preset in presets) {
@@ -83,42 +92,45 @@ const presets = require('../js/presets');
         return chosenPreset;
     }
 
-    _setTimelineOptions() {
-        this.timeline = anime.timeline({
+    protected setTimelineOptions(): void {
+
+        let timelineOptions: any = {
             easing: this.options.easing || defaults.easing,
             duration: this.options.duration || defaults.duration,
             delay: this.options.delay || defaults.delay,
             direction: this.options.direction || defaults.direction,
             autoplay: this.options.autoplay || defaults.autoplay,
-        });
+        }
+
+        this.timeline = anime.timeline(timelineOptions);
     }
 
-    _setTargetSettings(target) {
+    protected setTargetSettings(target: string): void {
         let that = this;
         let targetSetting = {};
 
         if(that.options.custom) {
-            that._mergeTimeline(target, that.options.custom.params);
+            that.mergeTimeline(target, that.options.custom.params);
         }
         else if(that.preset) {
             if(!that.preset.params) {
-                targetSetting = that._getChosenPreset();
-                that._mergeTimeline(target, targetSetting);
+                targetSetting = that.getChosenPreset();
+                that.mergeTimeline(target, targetSetting);
             }
             else {
-                targetSetting = Object.assign(that._getChosenPreset(), that.preset.params);
-                that._mergeTimeline(target, targetSetting, that.preset.params.offset)
+                targetSetting = Object.assign(that.getChosenPreset(), that.preset.params);
+                that.mergeTimeline(target, targetSetting, that.preset.params.offset)
             }
         }
     }
 
-    _mergeTimeline(target, settings, offset = null) {
-        this.timeline.add(Object.assign({ targets: target }, settings), offset);
+    protected mergeTimeline(target: string, settings: object, offset: string | number | null = null): void {
+        this.timeline.add(Object.assign({ targets: target } as any, settings), offset);
     }
 
-    _initTimeline(target) {
-        this._setTimelineOptions();
-        this._setTargetSettings(target);
+    protected initTimeline(target: string): void {
+        this.setTimelineOptions();
+        this.setTargetSettings(target);
     }
   }
 

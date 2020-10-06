@@ -93,14 +93,13 @@ const presets = require('../js/presets');
         }
 
         protected setTimelineOptions(): void {
-
             let timelineOptions: any = {
                 easing: (this.options.easing || defaults.easing) as string,
                 duration: (this.options.duration || defaults.duration) as number | object | Function,
                 delay: (this.options.delay || defaults.delay) as number | object | Function,
                 direction: (this.options.direction || defaults.direction) as string,
                 autoplay: (this.options.autoplay || defaults.autoplay) as boolean,
-            }
+            };
 
             this.timeline = anime.timeline(timelineOptions);
         }

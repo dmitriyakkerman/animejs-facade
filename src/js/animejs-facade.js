@@ -73,11 +73,11 @@ const presets = require('../js/presets');
         }
         setTimelineOptions() {
             let timelineOptions = {
-                easing: this.options.easing || defaults.easing,
-                duration: this.options.duration || defaults.duration,
-                delay: this.options.delay || defaults.delay,
-                direction: this.options.direction || defaults.direction,
-                autoplay: this.options.autoplay || defaults.autoplay,
+                easing: (this.options.easing || defaults.easing),
+                duration: (this.options.duration || defaults.duration),
+                delay: (this.options.delay || defaults.delay),
+                direction: (this.options.direction || defaults.direction),
+                autoplay: (this.options.autoplay || defaults.autoplay),
             };
             this.timeline = anime.timeline(timelineOptions);
         }

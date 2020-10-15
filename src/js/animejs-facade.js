@@ -16,7 +16,8 @@ const presets = require('../js/presets');
     }
 }(typeof self !== 'undefined' ? self : this, function () {
     class AnimeFacade {
-        constructor(targets, options) {
+        constructor(targets, options, eventType = 'load') {
+            this.eventType = 'load';
             if (!targets) {
                 throw new Error('No target selector');
             }
@@ -24,7 +25,8 @@ const presets = require('../js/presets');
                 throw new Error('Choose animation preset or write custom params');
             }
             this.targets = [targets];
-            this.options = options || {};
+            this.eventType = eventType;
+            this.options = Object.assign(this, options);
             this.preset = options.preset || {};
             this.onInit();
         }
@@ -49,13 +51,22 @@ const presets = require('../js/presets');
             });
         }
         initOnLoad() {
-            this.initBase();
+            if (this.eventType === 'load') {
+                this.initBase();
+            }
         }
         initOnScroll() {
             let that = this;
-            window.addEventListener('scroll', function () {
-                that.initBase();
-            });
+            if (this.eventType === 'load') {
+                window.addEventListener('scroll', function () {
+                    that.initBase();
+                });
+            }
+        }
+        play() {
+            if (this.eventType === 'click') {
+                this.initBase();
+            }
         }
         getChosenPreset() {
             let chosenPreset;

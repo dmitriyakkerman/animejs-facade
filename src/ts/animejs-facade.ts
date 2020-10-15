@@ -24,7 +24,7 @@ const presets = require('../js/presets');
         public preset: any;
         protected timeline: any;
 
-        constructor(targets: string, options: any, onLoad: boolean = true) {
+        constructor(targets: string, options: any) {
 
             if(!targets) {
                 throw new Error('No target selector');
@@ -35,7 +35,7 @@ const presets = require('../js/presets');
             }
 
             this.targets = [targets] as Array<string>;
-            this.onLoad = onLoad;
+            this.onLoad = options.onLoad || true as boolean;
             this.options = Object.assign(this, options);
             this.preset = options.preset || {} as object;
             this.onInit();
@@ -66,7 +66,7 @@ const presets = require('../js/presets');
         }
 
         protected initOnLoad(): void {
-            if(this.onLoad) {
+            if(this.options.onLoad) {
                 this.initBase();
             }
         }
@@ -74,7 +74,7 @@ const presets = require('../js/presets');
         protected initOnScroll(): void {
             let that = this;
 
-            if(this.onLoad) {
+            if(this.options.onLoad) {
                 window.addEventListener('scroll', function () {
                     that.initBase();
                 })
@@ -82,7 +82,7 @@ const presets = require('../js/presets');
         }
 
         public play(): void {
-            if(!this.onLoad) {
+            if(!this.options.onLoad) {
                 this.initBase();
             }
         }

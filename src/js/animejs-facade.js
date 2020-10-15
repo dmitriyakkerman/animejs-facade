@@ -16,7 +16,9 @@ const presets = require('../js/presets');
     }
 }(typeof self !== 'undefined' ? self : this, function () {
     class AnimeFacade {
-        constructor(targets, options) {
+        constructor(targets, options = {}) {
+            this.options = {};
+            this.timeline = Function;
             if (!targets) {
                 throw new Error('No target selector');
             }
@@ -106,7 +108,7 @@ const presets = require('../js/presets');
                 }
             }
         }
-        mergeTimeline(target, settings, offset = null) {
+        mergeTimeline(target, settings, offset = 0) {
             this.timeline.add(Object.assign({ targets: target }, settings), offset);
         }
         initTimeline(target) {

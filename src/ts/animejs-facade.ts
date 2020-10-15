@@ -19,10 +19,10 @@ const presets = require('../js/presets');
 
     class AnimeFacade {
         public targets: Array<string>;
-        public options: any;
-        private timeline: any;
+        public options: any = {};
+        private timeline: any = Function;
 
-        constructor(targets: string, options: any) {
+        constructor(targets: string, options: any = {}) {
 
             if(!targets) {
                 throw new Error('No target selector');
@@ -126,13 +126,13 @@ const presets = require('../js/presets');
                 }
                 else {
                     targetSetting = Object.assign(that.getChosenPreset(), that.options.preset.params);
-                    that.mergeTimeline(target, targetSetting, (that.options.preset.params.offset as any))
+                    that.mergeTimeline(target, targetSetting, (that.options.preset.params.offset as string | number))
                 }
             }
         }
 
-        protected mergeTimeline(target: string, settings: object, offset: any = null): void {
-            this.timeline.add(Object.assign({ targets: target } as any, settings), offset);
+        protected mergeTimeline(target: string, settings: object, offset: string | number = 0): void {
+            this.timeline.add(Object.assign({ targets: target } as object, settings), offset);
         }
 
         protected initTimeline(target: string): void {

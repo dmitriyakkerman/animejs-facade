@@ -19,12 +19,12 @@ const presets = require('../js/presets');
 
     class AnimeFacade {
         public targets: Array<string>;
-        public eventType: string = 'load';
+        public onLoad: boolean = true;
         public options: any;
         public preset: any;
         protected timeline: any;
 
-        constructor(targets: string, options: any, eventType: string = 'load') {
+        constructor(targets: string, options: any, onLoad: boolean = true) {
 
             if(!targets) {
                 throw new Error('No target selector');
@@ -35,7 +35,7 @@ const presets = require('../js/presets');
             }
 
             this.targets = [targets] as Array<string>;
-            this.eventType = eventType;
+            this.onLoad = onLoad;
             this.options = Object.assign(this, options);
             this.preset = options.preset || {} as object;
             this.onInit();
@@ -66,7 +66,7 @@ const presets = require('../js/presets');
         }
 
         protected initOnLoad(): void {
-            if(this.eventType === 'load') {
+            if(this.onLoad) {
                 this.initBase();
             }
         }
@@ -74,7 +74,7 @@ const presets = require('../js/presets');
         protected initOnScroll(): void {
             let that = this;
 
-            if(this.eventType === 'load') {
+            if(this.onLoad) {
                 window.addEventListener('scroll', function () {
                     that.initBase();
                 })
@@ -82,7 +82,7 @@ const presets = require('../js/presets');
         }
 
         public play(): void {
-            if(this.eventType === 'click') {
+            if(!this.onLoad) {
                 this.initBase();
             }
         }

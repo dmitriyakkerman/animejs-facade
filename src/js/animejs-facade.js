@@ -17,7 +17,6 @@ const presets = require('../js/presets');
 }(typeof self !== 'undefined' ? self : this, function () {
     class AnimeFacade {
         constructor(targets, options) {
-            this.onLoad = true;
             if (!targets) {
                 throw new Error('No target selector');
             }
@@ -25,9 +24,7 @@ const presets = require('../js/presets');
                 throw new Error('Choose animation preset or write custom params');
             }
             this.targets = [targets];
-            this.onLoad = options.onLoad || true;
-            this.options = Object.assign(this, options);
-            this.preset = options.preset || {};
+            this.options = options;
             this.onInit();
         }
         onInit() {
@@ -51,20 +48,20 @@ const presets = require('../js/presets');
             });
         }
         initOnLoad() {
-            if (this.options.onLoad) {
+            if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
                 this.initBase();
             }
         }
         initOnScroll() {
             let that = this;
-            if (this.options.onLoad) {
+            if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
                 window.addEventListener('scroll', function () {
                     that.initBase();
                 });
             }
         }
         play() {
-            if (!this.options.onLoad) {
+            if (!this.options.autoplay) {
                 this.initBase();
             }
         }
@@ -72,11 +69,11 @@ const presets = require('../js/presets');
             let chosenPreset;
             for (let preset in presets) {
                 if (presets.hasOwnProperty(preset)) {
-                    if (presets[this.preset.name]) {
-                        chosenPreset = presets[this.preset.name];
+                    if (presets[this.options.preset.name]) {
+                        chosenPreset = presets[this.options.preset.name];
                     }
                     else {
-                        throw new Error(`Chosen preset "${this.preset.name}" doesn\'t exist`);
+                        throw new Error(`Chosen preset "${this.options.preset.name}" doesn\'t exist`);
                     }
                 }
             }
@@ -88,7 +85,7 @@ const presets = require('../js/presets');
                 duration: (this.options.duration || defaults.duration),
                 delay: (this.options.delay || defaults.delay),
                 direction: (this.options.direction || defaults.direction),
-                autoplay: (this.options.autoplay || defaults.autoplay),
+                autoplay: ((this.options.autoplay || typeof this.options.autoplay === 'undefined') || defaults.autoplay),
             };
             this.timeline = anime.timeline(timelineOptions);
         }
@@ -98,14 +95,14 @@ const presets = require('../js/presets');
             if (that.options.custom) {
                 that.mergeTimeline(target, that.options.custom.params);
             }
-            else if (that.preset) {
-                if (!that.preset.params) {
+            else if (that.options.preset) {
+                if (!that.options.preset.params) {
                     targetSetting = that.getChosenPreset();
                     that.mergeTimeline(target, targetSetting);
                 }
                 else {
-                    targetSetting = Object.assign(that.getChosenPreset(), that.preset.params);
-                    that.mergeTimeline(target, targetSetting, that.preset.params.offset);
+                    targetSetting = Object.assign(that.getChosenPreset(), that.options.preset.params);
+                    that.mergeTimeline(target, targetSetting, that.options.preset.params.offset);
                 }
             }
         }

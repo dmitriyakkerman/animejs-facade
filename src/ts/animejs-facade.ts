@@ -19,10 +19,8 @@ const presets = require('../js/presets');
 
     class AnimeFacade {
         public targets: Array<string>;
-        public onLoad: boolean = true;
         public options: any;
-        public preset: any;
-        protected timeline: any;
+        private timeline: any;
 
         constructor(targets: string, options: any) {
 
@@ -35,9 +33,7 @@ const presets = require('../js/presets');
             }
 
             this.targets = [targets] as Array<string>;
-            this.onLoad = options.onLoad || true as boolean;
-            this.options = Object.assign(this, options);
-            this.preset = options.preset || {} as object;
+            this.options = options;
             this.onInit();
         }
 
@@ -66,7 +62,7 @@ const presets = require('../js/presets');
         }
 
         protected initOnLoad(): void {
-            if(this.options.onLoad) {
+            if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
                 this.initBase();
             }
         }
@@ -74,7 +70,7 @@ const presets = require('../js/presets');
         protected initOnScroll(): void {
             let that = this;
 
-            if(this.options.onLoad) {
+            if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
                 window.addEventListener('scroll', function () {
                     that.initBase();
                 })
@@ -82,7 +78,7 @@ const presets = require('../js/presets');
         }
 
         public play(): void {
-            if(!this.options.onLoad) {
+            if(!this.options.autoplay) {
                 this.initBase();
             }
         }
@@ -92,11 +88,11 @@ const presets = require('../js/presets');
 
             for (let preset in presets) {
                 if(presets.hasOwnProperty(preset)) {
-                    if(presets[this.preset.name as string]) {
-                        chosenPreset = presets[this.preset.name];
+                    if(presets[this.options.preset.name as string]) {
+                        chosenPreset = presets[this.options.preset.name];
                     }
                     else {
-                        throw new Error(`Chosen preset "${this.preset.name}" doesn\'t exist`)
+                        throw new Error(`Chosen preset "${this.options.preset.name}" doesn\'t exist`)
                     }
                 }
             }
@@ -110,7 +106,7 @@ const presets = require('../js/presets');
                 duration: (this.options.duration || defaults.duration) as number | object | Function,
                 delay: (this.options.delay || defaults.delay) as number | object | Function,
                 direction: (this.options.direction || defaults.direction) as string,
-                autoplay: (this.options.autoplay || defaults.autoplay) as boolean,
+                autoplay: ((this.options.autoplay || typeof this.options.autoplay === 'undefined') || defaults.autoplay) as boolean,
             };
 
             this.timeline = anime.timeline(timelineOptions);
@@ -123,14 +119,14 @@ const presets = require('../js/presets');
             if(that.options.custom as object) {
                 that.mergeTimeline(target, that.options.custom.params as object);
             }
-            else if(that.preset as object) {
-                if(!(that.preset.params as object)) {
+            else if(that.options.preset as object) {
+                if(!(that.options.preset.params as object)) {
                     targetSetting = that.getChosenPreset();
                     that.mergeTimeline(target, targetSetting);
                 }
                 else {
-                    targetSetting = Object.assign(that.getChosenPreset(), that.preset.params);
-                    that.mergeTimeline(target, targetSetting, (that.preset.params.offset as any))
+                    targetSetting = Object.assign(that.getChosenPreset(), that.options.preset.params);
+                    that.mergeTimeline(target, targetSetting, (that.options.preset.params.offset as any))
                 }
             }
         }

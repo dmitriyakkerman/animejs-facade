@@ -1,5 +1,6 @@
 import {define} from "./globals/globals";
 import {windowAnimeFacadeInterface} from "./interfaces/windowAnimeFacadeInterface";
+import {AnimeFacadeOptions} from "./types/AnimeFacadeOptions";
 
 declare let window: windowAnimeFacadeInterface;
 
@@ -19,10 +20,10 @@ const presets = require('../js/presets');
 
     class AnimeFacade {
         public targets: Array<string>;
-        public options: any = {};
+        public options: any;
         private timeline: any = Function;
 
-        constructor(targets: string, options: any = {}) {
+        constructor(targets: string, options: AnimeFacadeOptions) {
 
             if(!targets) {
                 throw new Error('No target selector');
@@ -88,11 +89,11 @@ const presets = require('../js/presets');
 
             for (let preset in presets) {
                 if(presets.hasOwnProperty(preset)) {
-                    if(presets[this.options.preset.name as string]) {
-                        chosenPreset = presets[this.options.preset.name];
+                    if(presets[this.options.preset!.name as string]) {
+                        chosenPreset = presets[this.options.preset!.name];
                     }
                     else {
-                        throw new Error(`Chosen preset "${this.options.preset.name}" doesn\'t exist`)
+                        throw new Error(`Chosen preset "${this.options.preset!.name}" doesn\'t exist`)
                     }
                 }
             }
@@ -117,16 +118,16 @@ const presets = require('../js/presets');
             let targetSetting = {};
 
             if(that.options.custom as object) {
-                that.mergeTimeline(target, that.options.custom.params as object);
+                that.mergeTimeline(target, that.options.custom!.params as object);
             }
             else if(that.options.preset as object) {
-                if(!(that.options.preset.params as object)) {
+                if(!(that.options.preset!.params as object)) {
                     targetSetting = that.getChosenPreset();
                     that.mergeTimeline(target, targetSetting);
                 }
                 else {
-                    targetSetting = Object.assign(that.getChosenPreset(), that.options.preset.params);
-                    that.mergeTimeline(target, targetSetting, (that.options.preset.params.offset as string | number))
+                    targetSetting = Object.assign(that.getChosenPreset(), that.options.preset!.params);
+                    that.mergeTimeline(target, targetSetting, (that.options.preset!.params.offset as string | number))
                 }
             }
         }

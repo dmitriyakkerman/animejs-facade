@@ -16,8 +16,7 @@ const presets = require('../js/presets');
     }
 }(typeof self !== 'undefined' ? self : this, function () {
     class AnimeFacade {
-        constructor(targets, options = {}) {
-            this.options = {};
+        constructor(targets, options) {
             this.timeline = Function;
             if (!targets) {
                 throw new Error('No target selector');

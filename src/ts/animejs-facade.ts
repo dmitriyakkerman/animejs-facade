@@ -1,6 +1,9 @@
 import {define} from "./globals/globals";
 import {windowAnimeFacadeInterface} from "./interfaces/windowAnimeFacadeInterface";
 import {AnimeFacadeOptions} from "./types/AnimeFacadeOptions";
+import {PresetOptions} from "./types/PresetOptions";
+import {CustomOptions} from "./types/СustomOptions";
+import {TimelineOptions} from "./types/TimelineOptions";
 
 declare let window: windowAnimeFacadeInterface;
 
@@ -20,8 +23,8 @@ const presets = require('../js/presets');
 
     class AnimeFacade {
         public targets: Array<string>;
-        public options: any;
-        private timeline: any = Function;
+        public options: AnimeFacadeOptions;
+        static timeline: TimelineOptions;
 
         constructor(targets: string, options: AnimeFacadeOptions) {
 
@@ -89,11 +92,11 @@ const presets = require('../js/presets');
 
             for (let preset in presets) {
                 if(presets.hasOwnProperty(preset)) {
-                    if(presets[this.options.preset!.name as string]) {
-                        chosenPreset = presets[this.options.preset!.name];
+                    if(presets[(this.options.preset as PresetOptions).name as string]) {
+                        chosenPreset = presets[(this.options.preset as PresetOptions).name];
                     }
                     else {
-                        throw new Error(`Chosen preset "${this.options.preset!.name}" doesn\'t exist`)
+                        throw new Error(`Chosen preset "${(this.options.preset as PresetOptions).name}" doesn\'t exist`)
                     }
                 }
             }
@@ -110,7 +113,7 @@ const presets = require('../js/presets');
                 autoplay: ((this.options.autoplay || typeof this.options.autoplay === 'undefined') || defaults.autoplay) as boolean,
             };
 
-            this.timeline = anime.timeline(timelineOptions);
+            AnimeFacade.timeline = anime.timeline(timelineOptions);
         }
 
         protected setTargetSettings(target: string): void {
@@ -118,22 +121,22 @@ const presets = require('../js/presets');
             let targetSetting = {};
 
             if(that.options.custom as object) {
-                that.mergeTimeline(target, that.options.custom!.params as object);
+                AnimeFacade.mergeTimeline(target, (that.options.custom as CustomOptions).params as object);
             }
             else if(that.options.preset as object) {
-                if(!(that.options.preset!.params as object)) {
+                if(!((that.options.preset as PresetOptions).params as object)) {
                     targetSetting = that.getChosenPreset();
-                    that.mergeTimeline(target, targetSetting);
+                    AnimeFacade.mergeTimeline(target, targetSetting);
                 }
                 else {
-                    targetSetting = Object.assign(that.getChosenPreset(), that.options.preset!.params);
-                    that.mergeTimeline(target, targetSetting, (that.options.preset!.params.offset as string | number))
+                    targetSetting = Object.assign(that.getChosenPreset(), (that.options.preset as PresetOptions).params);
+                    AnimeFacade.mergeTimeline(target, targetSetting, ((that.options.preset as PresetOptions).params.offset as string | number))
                 }
             }
         }
 
-        protected mergeTimeline(target: string, settings: object, offset: string | number = 0): void {
-            this.timeline.add(Object.assign({ targets: target } as object, settings), offset);
+        static mergeTimeline(target: string, settings: object, offset: string | number = 0): void {
+            AnimeFacade.timeline.add(Object.assign({ targets: target } as object, settings), offset);
         }
 
         protected initTimeline(target: string): void {

@@ -36,12 +36,9 @@ const presets = require('../js/presets');
             that.targets.forEach(function (targetElement) {
                 let node = document.querySelector(targetElement);
                 if (!node.classList.contains('animated')) {
-                    let windowHeight = window.innerHeight;
                     let targetPosition = node.getBoundingClientRect().top;
-                    if (targetPosition - windowHeight <= 0) {
-                        window.requestAnimationFrame(function () {
-                            that.initTimeline(targetElement);
-                        });
+                    if (targetPosition - AnimeFacade.windowHeight <= 0) {
+                        that.initTimeline(targetElement);
                         node.classList.add('animated');
                     }
                 }
@@ -114,6 +111,7 @@ const presets = require('../js/presets');
             this.setTargetSettings(target);
         }
     }
+    AnimeFacade.windowHeight = window.innerHeight;
     window.AnimeFacade = AnimeFacade;
     return AnimeFacade;
 }));

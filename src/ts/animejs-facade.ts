@@ -25,7 +25,7 @@ const presets = require('../js/presets');
         public targets: Array<string>;
         public options: AnimeFacadeOptions;
         static timeline: TimelineOptions;
-        static windowHeight: number = window.innerHeight;
+        static windowHeight = window.innerHeight as number;
 
         constructor(targets: string, options: AnimeFacadeOptions) {
 
@@ -54,8 +54,9 @@ const presets = require('../js/presets');
                 let node = document.querySelector(targetElement) as HTMLElement;
 
                 if(!node.classList.contains('animated')) {
+                    let windowHeight = AnimeFacade.windowHeight;
                     let targetPosition = node.getBoundingClientRect().top;
-                    if (targetPosition - AnimeFacade.windowHeight <= 0) {
+                    if (targetPosition - windowHeight <= 0) {
                         that.initTimeline(targetElement);
                         node.classList.add('animated');
                     }

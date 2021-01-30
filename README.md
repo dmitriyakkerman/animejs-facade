@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/dmitriyakkerman/animejs-facade.svg?branch=master)](https://travis-ci.org/dmitriyakkerman/animejs-facade)
+[![codebeat badge](https://codebeat.co/badges/8e9519ac-eebd-424d-b8d9-7039f19df6d4)](https://codebeat.co/projects/github-com-dmitriyakkerman-animejs-facade-master)
 [![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
 **Usage:**

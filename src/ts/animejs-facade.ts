@@ -25,6 +25,7 @@ const presets = require('../js/presets');
         public targets: Array<string>;
         public options: AnimeFacadeOptions;
         static timeline: TimelineOptions;
+        static windowHeight = window.innerHeight as number;
 
         constructor(targets: string, options: AnimeFacadeOptions) {
 
@@ -38,19 +39,33 @@ const presets = require('../js/presets');
 
             this.targets = [targets] as Array<string>;
             this.options = options;
-            this.init();
+            this.onInit();
         }
 
-        protected init(): void {
+        protected onInit(): void {
+            this.initOnLoad();
+            this.initOnScroll();
+        }
+
+        protected initBase(): void {
             let that = this;
 
             that.targets.forEach(function(targetElement: string) {
-
                 let observer = new IntersectionObserver(
                     function(entries, observer) {
                         entries.forEach(entry => {
                             if(entry.isIntersecting) {
-                                that.initTimeline(entry.target);
+
+                                if(!entry.target.classList.contains('animated')) {
+                                    let windowHeight = AnimeFacade.windowHeight;
+                                    let targetPosition = entry.target.getBoundingClientRect().top;
+                                    if (targetPosition - windowHeight <= 0) {
+                                        that.initTimeline(entry.target);
+                                        entry.target.classList.add('animated');
+                                    }
+                                }
+
+
                             }
                         });
                     },
@@ -63,7 +78,30 @@ const presets = require('../js/presets');
                 targets.forEach(function(target) {
                     observer.observe(target);
                 });
+
             })
+        }
+
+        protected initOnLoad(): void {
+            if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
+                this.initBase();
+            }
+        }
+
+        protected initOnScroll(): void {
+            let that = this;
+
+            if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
+                window.addEventListener('scroll', function () {
+                    that.initBase();
+                })
+            }
+        }
+
+        public play(): void {
+            if(!this.options.autoplay) {
+                this.initBase();
+            }
         }
 
         protected getChosenPreset(): object {

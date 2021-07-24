@@ -25,15 +25,26 @@ const presets = require('../js/presets');
             }
             this.targets = [targets];
             this.options = options;
-            this.init();
+            this.onInit();
         }
-        init() {
+        onInit() {
+            this.initOnLoad();
+            this.initOnScroll();
+        }
+        initBase() {
             let that = this;
             that.targets.forEach(function (targetElement) {
                 let observer = new IntersectionObserver(function (entries, observer) {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            that.initTimeline(entry.target);
+                            if (!entry.target.classList.contains('animated')) {
+                                let windowHeight = AnimeFacade.windowHeight;
+                                let targetPosition = entry.target.getBoundingClientRect().top;
+                                if (targetPosition - windowHeight <= 0) {
+                                    that.initTimeline(entry.target);
+                                    entry.target.classList.add('animated');
+                                }
+                            }
                         }
                     });
                 }, {
@@ -45,6 +56,24 @@ const presets = require('../js/presets');
                     observer.observe(target);
                 });
             });
+        }
+        initOnLoad() {
+            if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
+                this.initBase();
+            }
+        }
+        initOnScroll() {
+            let that = this;
+            if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
+                window.addEventListener('scroll', function () {
+                    that.initBase();
+                });
+            }
+        }
+        play() {
+            if (!this.options.autoplay) {
+                this.initBase();
+            }
         }
         getChosenPreset() {
             let chosenPreset;
@@ -95,6 +124,7 @@ const presets = require('../js/presets');
             this.setTargetSettings(target);
         }
     }
+    AnimeFacade.windowHeight = window.innerHeight;
     window.AnimeFacade = AnimeFacade;
     return AnimeFacade;
 }));

@@ -25,7 +25,6 @@ const presets = require('../js/presets');
         public targets: Array<string>;
         public options: AnimeFacadeOptions;
         static timeline: TimelineOptions;
-        static windowHeight = window.innerHeight as number;
 
         constructor(targets: string, options: AnimeFacadeOptions) {
 
@@ -39,51 +38,32 @@ const presets = require('../js/presets');
 
             this.targets = [targets] as Array<string>;
             this.options = options;
-            this.onInit();
+            this.init();
         }
 
-        protected onInit(): void {
-            this.initOnLoad();
-            this.initOnScroll();
-        }
-
-        protected initBase(): void {
+        protected init(): void {
             let that = this;
 
             that.targets.forEach(function(targetElement: string) {
-                let node = document.querySelector(targetElement) as HTMLElement;
 
-                if(!node.classList.contains('animated')) {
-                    let windowHeight = AnimeFacade.windowHeight;
-                    let targetPosition = node.getBoundingClientRect().top;
-                    if (targetPosition - windowHeight <= 0) {
-                        that.initTimeline(targetElement);
-                        node.classList.add('animated');
-                    }
-                }
+                let observer = new IntersectionObserver(
+                    function(entries, observer) {
+                        entries.forEach(entry => {
+                            if(entry.isIntersecting) {
+                                that.initTimeline(entry.target);
+                            }
+                        });
+                    },
+                    {
+                        rootMargin: '0px',
+                        threshold: 0
+                    });
+
+                let targets = document.querySelectorAll(targetElement);
+                targets.forEach(function(target) {
+                    observer.observe(target);
+                });
             })
-        }
-
-        protected initOnLoad(): void {
-            if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
-                this.initBase();
-            }
-        }
-
-        protected initOnScroll(): void {
-            let that = this;
-
-            if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
-                window.addEventListener('scroll', function () {
-                    that.initBase();
-                })
-            }
-        }
-
-        public play(): void {
-            if(!this.options.autoplay) {
-                this.initBase();
-            }
         }
 
         protected getChosenPreset(): object {
@@ -115,7 +95,7 @@ const presets = require('../js/presets');
             AnimeFacade.timeline = anime.timeline(timelineOptions);
         }
 
-        protected setTargetSettings(target: string): void {
+        protected setTargetSettings(target: Element): void {
             let that = this;
             let targetSetting = {};
 
@@ -134,11 +114,11 @@ const presets = require('../js/presets');
             }
         }
 
-        static mergeTimeline(target: string, settings: object, offset: string | number = 0): void {
+        static mergeTimeline(target: Element, settings: object, offset: string | number = 0): void {
             AnimeFacade.timeline.add(Object.assign({ targets: target } as object, settings), offset);
         }
 
-        protected initTimeline(target: string): void {
+        protected initTimeline(target: Element): void {
             this.setTimelineOptions();
             this.setTargetSettings(target);
         }

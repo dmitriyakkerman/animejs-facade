@@ -4,7 +4,7 @@ const anime = require('../../anime.min');
 
 module.exports = {
     translateX: ['-100%', 0],
-    duration: 1500,
+    duration: 1000,
     easing: "easeInQuint",
     complete: function(anim) {
         anime({

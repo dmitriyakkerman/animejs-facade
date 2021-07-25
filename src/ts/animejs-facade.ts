@@ -53,19 +53,16 @@ const presets = require('../js/presets');
             that.targets.forEach(function(targetElement: string) {
                 let observer = new IntersectionObserver(
                     function(entries, observer) {
-                        entries.forEach(entry => {
+                        entries.forEach((entry, index) => {
                             if(entry.isIntersecting) {
-
                                 if(!entry.target.classList.contains('animated')) {
                                     let windowHeight = AnimeFacade.windowHeight;
                                     let targetPosition = entry.target.getBoundingClientRect().top;
                                     if (targetPosition - windowHeight <= 0) {
-                                        that.initTimeline(entry.target);
+                                        that.initTimeline(entry.target, index);
                                         entry.target.classList.add('animated');
                                     }
                                 }
-
-
                             }
                         });
                     },
@@ -121,11 +118,11 @@ const presets = require('../js/presets');
             return chosenPreset;
         }
 
-        protected setTimelineOptions(): void {
+        protected setTimelineOptions(index: Number): void {
             let timelineOptions: any = {
                 easing: (this.options.easing || defaults.easing) as string,
                 duration: (this.options.duration || defaults.duration) as number | object | Function,
-                delay: (this.options.delay || defaults.delay) as number | object | Function,
+                delay: (typeof this.options.delay === 'function' ? this.options.delay(index) : defaults.delay) as number | Function,
                 direction: (this.options.direction || defaults.direction) as string,
                 autoplay: ((this.options.autoplay || typeof this.options.autoplay === 'undefined') || defaults.autoplay) as boolean,
             };
@@ -156,8 +153,8 @@ const presets = require('../js/presets');
             AnimeFacade.timeline.add(Object.assign({ targets: target } as object, settings), offset);
         }
 
-        protected initTimeline(target: Element): void {
-            this.setTimelineOptions();
+        protected initTimeline(target: Element, index: Number): void {
+            this.setTimelineOptions(index);
             this.setTargetSettings(target);
         }
     }

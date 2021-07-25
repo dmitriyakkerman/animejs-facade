@@ -35,13 +35,13 @@ const presets = require('../js/presets');
             let that = this;
             that.targets.forEach(function (targetElement) {
                 let observer = new IntersectionObserver(function (entries, observer) {
-                    entries.forEach(entry => {
+                    entries.forEach((entry, index) => {
                         if (entry.isIntersecting) {
                             if (!entry.target.classList.contains('animated')) {
                                 let windowHeight = AnimeFacade.windowHeight;
                                 let targetPosition = entry.target.getBoundingClientRect().top;
                                 if (targetPosition - windowHeight <= 0) {
-                                    that.initTimeline(entry.target);
+                                    that.initTimeline(entry.target, index);
                                     entry.target.classList.add('animated');
                                 }
                             }
@@ -89,11 +89,11 @@ const presets = require('../js/presets');
             }
             return chosenPreset;
         }
-        setTimelineOptions() {
+        setTimelineOptions(index) {
             let timelineOptions = {
                 easing: (this.options.easing || defaults.easing),
                 duration: (this.options.duration || defaults.duration),
-                delay: (this.options.delay || defaults.delay),
+                delay: (typeof this.options.delay === 'function' ? this.options.delay(index) : defaults.delay),
                 direction: (this.options.direction || defaults.direction),
                 autoplay: ((this.options.autoplay || typeof this.options.autoplay === 'undefined') || defaults.autoplay),
             };
@@ -119,8 +119,8 @@ const presets = require('../js/presets');
         static mergeTimeline(target, settings, offset = 0) {
             AnimeFacade.timeline.add(Object.assign({ targets: target }, settings), offset);
         }
-        initTimeline(target) {
-            this.setTimelineOptions();
+        initTimeline(target, index) {
+            this.setTimelineOptions(index);
             this.setTargetSettings(target);
         }
     }

@@ -56,18 +56,14 @@ const presets = require('../js/presets');
                         entries.forEach((entry, index) => {
                             if(entry.isIntersecting) {
                                 if(!entry.target.classList.contains('animated')) {
-                                    let windowHeight = AnimeFacade.windowHeight;
-                                    let targetPosition = entry.target.getBoundingClientRect().top;
-                                    if (targetPosition - windowHeight <= 0) {
-                                        that.initTimeline(entry.target, index);
-                                        entry.target.classList.add('animated');
-                                    }
+                                    that.initTimeline(entry.target, index);
+                                    entry.target.classList.add('animated');
                                 }
                             }
                         });
                     },
                     {
-                        rootMargin: '0px',
+                        rootMargin: that.options.rootMargin || defaults.rootMargin,
                         threshold: 0
                     });
 

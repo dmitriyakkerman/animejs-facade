@@ -5,5 +5,6 @@ export type AnimeFacadeOptions = {
     duration?: number | object | Function,
     delay?: number | object | Function,
     direction?: string,
-    autoplay?: boolean
+    autoplay?: boolean,
+    rootMargin?: string
 }

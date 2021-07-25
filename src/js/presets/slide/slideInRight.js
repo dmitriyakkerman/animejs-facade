@@ -13,12 +13,5 @@ module.exports = {
             duration: 1000,
             easing: "easeInOutQuart"
         });
-        anime({
-            targets: anim.animatables[0].target.lastElementChild,
-            opacity: [0, 1],
-            duration: 500,
-            delay: 300,
-            easing: "easeOutCirc"
-        });
     }
 }

@@ -64,7 +64,7 @@ const presets = require('../js/presets');
                     },
                     {
                         rootMargin: that.options.rootMargin || defaults.rootMargin,
-                        threshold: 0
+                        threshold: that.options.threshold || defaults.threshold
                     });
 
                 let targets = document.querySelectorAll(targetElement);

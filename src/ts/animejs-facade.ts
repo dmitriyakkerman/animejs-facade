@@ -44,7 +44,6 @@ const presets = require('../js/presets');
 
         protected onInit(): void {
             this.initOnLoad();
-            this.initOnScroll();
         }
 
         protected initBase(): void {
@@ -78,16 +77,6 @@ const presets = require('../js/presets');
         protected initOnLoad(): void {
             if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
                 this.initBase();
-            }
-        }
-
-        protected initOnScroll(): void {
-            let that = this;
-
-            if(this.options.autoplay || typeof this.options.autoplay === 'undefined') {
-                window.addEventListener('scroll', function () {
-                    that.initBase();
-                })
             }
         }
 

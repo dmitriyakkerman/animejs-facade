@@ -29,7 +29,6 @@ const presets = require('../js/presets');
         }
         onInit() {
             this.initOnLoad();
-            this.initOnScroll();
         }
         initBase() {
             let that = this;
@@ -56,14 +55,6 @@ const presets = require('../js/presets');
         initOnLoad() {
             if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
                 this.initBase();
-            }
-        }
-        initOnScroll() {
-            let that = this;
-            if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
-                window.addEventListener('scroll', function () {
-                    that.initBase();
-                });
             }
         }
         play() {

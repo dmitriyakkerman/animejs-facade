@@ -70,3 +70,5 @@ _Example with custom Anime.js properties without using anime-facade presets:_
     textInRight,
     textInUp,
     textInDown  
+
+*Presets demos in progress...*

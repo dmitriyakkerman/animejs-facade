@@ -28,7 +28,9 @@ const presets = require('../js/presets');
             this.onInit();
         }
         onInit() {
-            this.initOnLoad();
+            if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
+                this.initBase();
+            }
         }
         initBase() {
             let that = this;
@@ -51,16 +53,6 @@ const presets = require('../js/presets');
                     observer.observe(target);
                 });
             });
-        }
-        initOnLoad() {
-            if (this.options.autoplay || typeof this.options.autoplay === 'undefined') {
-                this.initBase();
-            }
-        }
-        play() {
-            if (!this.options.autoplay) {
-                this.initBase();
-            }
         }
         getChosenPreset() {
             let chosenPreset;
@@ -92,7 +84,7 @@ const presets = require('../js/presets');
             if (that.options.custom) {
                 AnimeFacade.mergeTimeline(target, that.options.custom.params);
             }
-            else if (that.options.preset) {
+            if (that.options.preset) {
                 if (!that.options.preset.params) {
                     targetSetting = that.getChosenPreset();
                     AnimeFacade.mergeTimeline(target, targetSetting);

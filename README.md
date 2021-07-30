@@ -4,35 +4,30 @@
 
 **Usage:**
 
-ES6 import: 
-            
-    import AnimeFacade from 'animejs-facade.min.js'
+1.Connect [Anime.js](https://animejs.com/) and anime-facade.
 
-Require:
-    
-    const AnimeFacade = require('animejs-facade.min.js');
-    
-Script:
+```js
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="animejs-facade.min.js"></script>
+```
 
-    <script src="./dist/js/animejs-facade.min.js"></script>
+2.Init your animation.
 
-Markup:
-
-_Preset with default options:_
+_Example with anime-facade preset:_
 
     new AnimeFacade('.logo', {
         preset: {
-            name: 'scaleIn'
+            name: 'scale'
         }
     });    
 
-_Preset with custom options:_
+_Example with customized anime-facade preset:_
 
     new AnimeFacade('.logo', {
         preset: {
-            name: 'scaleIn',
+            name: 'scale',
             params: {
-                scale: [0, 1],
+                scale: [0, 2],
                 duration: 2500,
                 easing: "easeOutBounce",
                 offset: -500
@@ -40,12 +35,12 @@ _Preset with custom options:_
         }
     });  
 
-_Instance with custom options without preset:_
+_Example with custom Anime.js properties:_
 
-        new AnimeFacade('.logo', {
-            custom: {
-                params: {
-                    translateX: [0, '100px'],
-                }
-            }            
-        });
+    new AnimeFacade('.logo', {
+        custom: {
+            params: {
+                translateX: [0, '100px'],
+            }
+        }            
+    });

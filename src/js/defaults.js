@@ -5,6 +5,6 @@ module.exports = {
     loop: false,
     direction: 'normal',
     autoplay: true,
-    rootMargin: '100px',
+    rootMargin: '0px',
     threshold: 0
 };

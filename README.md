@@ -21,23 +21,25 @@ _Example with anime-facade preset:_
         }
     });    
 
-_Example with customized anime-facade preset:_
+_Example with customized anime-facade preset properties:_
 
-    new AnimeFacade('.logo', {
+    new AnimeFacade('.el', {
         preset: {
-            name: 'scale',
+            name: 'fadeIn',
             params: {
-                scale: [0, 2],
-                duration: 2500,
-                easing: "easeOutBounce",
-                offset: -500
+                opacity: [0.5, 1],
             }
-        }
+        },
+        duration: 2500,
+        delay: function (el, i, l) {
+            return i * 500
+        },
+        easing: "easeOutBounce"
     });  
 
-_Example with custom Anime.js properties:_
+_Example with custom Anime.js properties without using anime-facade presets:_
 
-    new AnimeFacade('.logo', {
+    new AnimeFacade('.box', {
         custom: {
             params: {
                 translateX: [0, '100px'],

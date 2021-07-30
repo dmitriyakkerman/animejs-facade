@@ -6,8 +6,6 @@ module.exports = {
     width: function(el) {
         return [0, window.getComputedStyle(el).width]
     },
-    duration: 1500,
-    easing: "easeInQuint",
     complete: function(anim) {
         anime({
             targets: anim.animatables[0].target.firstElementChild,

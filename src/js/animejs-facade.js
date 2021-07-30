@@ -39,7 +39,7 @@ const presets = require('../js/presets');
                     entries.forEach((entry, index) => {
                         if (entry.intersectionRatio > 0) {
                             if (!entry.target.classList.contains('animated')) {
-                                that.initTimeline(entry.target, index);
+                                that.initTimeline(entry.target, index, entries.length);
                                 entry.target.classList.add('animated');
                             }
                         }
@@ -68,11 +68,13 @@ const presets = require('../js/presets');
             }
             return chosenPreset;
         }
-        setTimelineOptions(index) {
+        setTimelineOptions(target, index, length) {
             let timelineOptions = {
                 easing: (this.options.easing || defaults.easing),
                 duration: (this.options.duration || defaults.duration),
-                delay: (typeof this.options.delay === 'function' ? this.options.delay(index) : defaults.delay),
+                delay: ((typeof this.options.delay === 'function') ? this.options.delay(target, index, length) :
+                    (typeof this.options.delay === "number") ? this.options.delay :
+                        defaults.delay),
                 direction: (this.options.direction || defaults.direction),
                 autoplay: ((this.options.autoplay || typeof this.options.autoplay === 'undefined') || defaults.autoplay),
             };
@@ -98,8 +100,8 @@ const presets = require('../js/presets');
         static mergeTimeline(target, settings, offset = 0) {
             AnimeFacade.timeline.add(Object.assign({ targets: target }, settings), offset);
         }
-        initTimeline(target, index) {
-            this.setTimelineOptions(index);
+        initTimeline(target, index, length) {
+            this.setTimelineOptions(target, index, length);
             this.setTargetSettings(target);
         }
     }

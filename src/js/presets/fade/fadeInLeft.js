@@ -2,7 +2,5 @@
 
 module.exports = {
     opacity: [0, 1],
-    translateX: ['100px', 0],
-    duration: 1000,
-    easing: "easeOutExpo",
+    translateX: ['100px', 0]
 }

@@ -57,7 +57,7 @@ const presets = require('../js/presets');
                         entries.forEach((entry, index) => {
                             if(entry.intersectionRatio > 0) {
                                 if(!entry.target.classList.contains('animated')) {
-                                    that.initTimeline(entry.target, index);
+                                    that.initTimeline(entry.target, index, entries.length);
                                     entry.target.classList.add('animated');
                                 }
                             }
@@ -93,11 +93,15 @@ const presets = require('../js/presets');
             return chosenPreset;
         }
 
-        protected setTimelineOptions(index: Number): void {
+        protected setTimelineOptions(target: Element, index: Number, length: Number): void {
             let timelineOptions: any = {
                 easing: (this.options.easing || defaults.easing) as string,
                 duration: (this.options.duration || defaults.duration) as number | object | Function,
-                delay: (typeof this.options.delay === 'function' ? this.options.delay(index) : defaults.delay) as number | Function,
+                delay: (
+                    (typeof this.options.delay === 'function') ? this.options.delay(target, index, length) :
+                    (typeof this.options.delay === "number") ? this.options.delay :
+                    defaults.delay) as number | Function
+                ,
                 direction: (this.options.direction || defaults.direction) as string,
                 autoplay: ((this.options.autoplay || typeof this.options.autoplay === 'undefined') || defaults.autoplay) as boolean,
             };
@@ -129,8 +133,8 @@ const presets = require('../js/presets');
             AnimeFacade.timeline.add(Object.assign({ targets: target } as object, settings), offset);
         }
 
-        protected initTimeline(target: Element, index: Number): void {
-            this.setTimelineOptions(index);
+        protected initTimeline(target: Element, index: Number, length: Number): void {
+            this.setTimelineOptions(target, index, length);
             this.setTargetSettings(target);
         }
     }

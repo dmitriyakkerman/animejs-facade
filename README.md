@@ -43,8 +43,11 @@ _Example with custom Anime.js properties without using anime-facade presets:_
         custom: {
             params: {
                 translateX: [0, '100px'],
+                duration: 2500,
+                delay: 2000,
+                easing: "easeInOutQuad"
             }
-        }            
+        }
     });
     
 **Available presets**  

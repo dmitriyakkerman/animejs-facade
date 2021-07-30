@@ -44,3 +44,27 @@ _Example with custom Anime.js properties:_
             }
         }            
     });
+    
+**Available presets**  
+
+    fadeIn,
+    fadeOut,
+    fadeInUp,
+    fadeInDown,
+    fadeInLeft,
+    fadeInRight,
+    scale,
+    squeeze,
+    slideInUp,
+    slideInRight,
+    slideRightScale,
+    slideUpStretch,
+    num,
+    draw,
+    textIn,
+    textRotate,
+    textType,
+    textInLeft,
+    textInRight,
+    textInUp,
+    textInDown  

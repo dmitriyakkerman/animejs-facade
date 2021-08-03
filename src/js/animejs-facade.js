@@ -37,7 +37,7 @@ const presets = require('../js/presets');
             that.targets.forEach(function (targetElement) {
                 let observer = new IntersectionObserver(function (entries, observer) {
                     entries.forEach((entry, index) => {
-                        if (entry.intersectionRatio > 0) {
+                        if (entry.intersectionRatio > 0 || entry.boundingClientRect.y < 0) {
                             if (!entry.target.classList.contains('animated')) {
                                 that.initTimeline(entry.target, index, entries.length);
                                 entry.target.classList.add('animated');

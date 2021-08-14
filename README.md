@@ -1,5 +1,3 @@
-![Testing](https://github.com/dmitriyakkerman/animejs-facade/workflows/test/badge.svg)
-
 **Usage:**
 
 1.Connect [Anime.js](https://animejs.com/) and anime-facade.

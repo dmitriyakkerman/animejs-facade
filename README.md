@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dmitriyakkerman/animejs-facade.svg?branch=master)](https://travis-ci.org/dmitriyakkerman/animejs-facade)
+![Testing](https://github.com/dmitriyakkerman/animejs-facade/workflows/test/badge.svg)
 [![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
 **Usage:**

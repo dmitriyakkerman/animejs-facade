@@ -34,24 +34,20 @@ const presets = require('../js/presets');
         }
         initBase() {
             let that = this;
-            that.targets.forEach(function (targetElement) {
-                let observer = new IntersectionObserver(function (entries, observer) {
-                    entries.forEach((entry, index) => {
-                        if (entry.intersectionRatio > 0 || entry.boundingClientRect.y < 0) {
-                            if (!entry.target.classList.contains('animated')) {
-                                that.initTimeline(entry.target, index, entries.length);
-                                entry.target.classList.add('animated');
-                            }
-                        }
-                    });
-                }, {
-                    rootMargin: that.options.rootMargin || defaults.rootMargin,
-                    threshold: that.options.threshold || defaults.threshold
+            let observer = new IntersectionObserver(function (entries, observer) {
+                entries.forEach((entry, index) => {
+                    if (entry.intersectionRatio > 0 || entry.boundingClientRect.y < 0) {
+                        that.initTimeline(entry.target, index, entries.length);
+                        observer.unobserve(entry.target);
+                    }
                 });
-                let targets = document.querySelectorAll(targetElement);
-                targets.forEach(function (target) {
-                    observer.observe(target);
-                });
+            }, {
+                rootMargin: that.options.rootMargin || defaults.rootMargin,
+                threshold: that.options.threshold || defaults.threshold
+            });
+            let targets = document.querySelectorAll(that.targets);
+            targets.forEach(function (target) {
+                observer.observe(target);
             });
         }
         getChosenPreset() {

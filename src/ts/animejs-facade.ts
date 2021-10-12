@@ -25,7 +25,6 @@ const presets = require('../js/presets');
         public targets: Array<string>;
         public options: AnimeFacadeOptions;
         static timeline: TimelineOptions;
-        static windowHeight = window.innerHeight as number;
 
         constructor(targets: string, options: AnimeFacadeOptions) {
 
@@ -51,29 +50,25 @@ const presets = require('../js/presets');
         protected initBase(): void {
             let that = this;
 
-            that.targets.forEach(function(targetElement: string) {
-                let observer = new IntersectionObserver(
-                    function(entries, observer) {
-                        entries.forEach((entry, index) => {
-                            if(entry.intersectionRatio > 0 || entry.boundingClientRect.y < 0) {
-                                if(!entry.target.classList.contains('animated')) {
-                                    that.initTimeline(entry.target, index, entries.length);
-                                    entry.target.classList.add('animated');
-                                }
-                            }
-                        });
-                    },
-                    {
-                        rootMargin: that.options.rootMargin || defaults.rootMargin,
-                        threshold: that.options.threshold || defaults.threshold
+            let observer = new IntersectionObserver(
+                function(entries, observer) {
+                    entries.forEach((entry, index) => {
+                        if(entry.intersectionRatio > 0 || entry.boundingClientRect.y < 0) {
+                            that.initTimeline(entry.target, index, entries.length);
+                            observer.unobserve(entry.target);
+                        }
                     });
+                },
+                {
+                    rootMargin: that.options.rootMargin || defaults.rootMargin,
+                    threshold: that.options.threshold || defaults.threshold
+                }
+            );
 
-                let targets = document.querySelectorAll(targetElement);
-                targets.forEach(function(target) {
-                    observer.observe(target);
-                });
-
-            })
+            let targets = document.querySelectorAll(that.targets);
+            targets.forEach(function(target) {
+                observer.observe(target);
+            });
         }
 
         protected getChosenPreset(): object {

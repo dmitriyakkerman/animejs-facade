@@ -45,7 +45,7 @@ const presets = require('../js/presets');
                 rootMargin: that.options.rootMargin || defaults.rootMargin,
                 threshold: that.options.threshold || defaults.threshold
             });
-            let targets = document.querySelectorAll(that.targets);
+            let targets = document.querySelectorAll(this.targets);
             targets.forEach(function (target) {
                 observer.observe(target);
             });
@@ -101,7 +101,6 @@ const presets = require('../js/presets');
             this.setTargetSettings(target);
         }
     }
-    AnimeFacade.windowHeight = window.innerHeight;
     window.AnimeFacade = AnimeFacade;
     return AnimeFacade;
 }));

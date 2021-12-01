@@ -65,7 +65,7 @@ const presets = require('../js/presets');
                 }
             );
 
-            let targets = document.querySelectorAll(that.targets);
+            let targets = document.querySelectorAll(this.targets);
             targets.forEach(function(target) {
                 observer.observe(target);
             });
@@ -89,7 +89,7 @@ const presets = require('../js/presets');
         }
 
         protected setTimelineOptions(target: Element, index: Number, length: Number): void {
-            let timelineOptions: any = {
+            let timelineOptions: unknown = {
                 easing: (this.options.easing || defaults.easing) as string,
                 duration: (this.options.duration || defaults.duration) as number | object | Function,
                 delay: (
